@@ -221,7 +221,7 @@ The ticket records an immutable mandate: who asked, on which source, with what s
 The prepare command runs once per ticket, in the execution root, before the first worker turn. It:
 
 1. fetches `origin/main` and creates a worktree at the ticket directory;
-2. creates or resets the branch `agent/<ticket-short-name>`;
+2. creates the branch `agent/<ticket-short-name>` (a resumed ticket keeps its commits);
 3. installs dependencies from the lockfile;
 4. runs the factory doctor;
 5. records the baseline source — the current production URL for a redesign, or an explicit "no baseline" for a new site — for the worker's first evidence run.
