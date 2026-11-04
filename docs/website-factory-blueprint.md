@@ -898,6 +898,8 @@ Research and component tooling (pinned with the repo; see [§6.4](#64-self-insta
 | `@21st-dev/cli` | 1.18.0 | Component discovery | Optional |
 | rea-agents | 6.8.0 | Authorized reference analysis | Optional |
 | firecrawl | 4.51.0 | Reference discovery and content | Optional |
+| awwwards-mcp | 1.18.0 | Awwwards inspiration and design DNA | Optional |
+| juliobsz/skills | vendored commit | `/jury` independent design QA | Optional |
 | transitions.dev skill | vendored commit | Micro-interaction recipes | Yes |
 
 Verify a candidate version before pinning:
@@ -1447,6 +1449,8 @@ These are deliberately left open; they need a decision from the team, not from a
 
 The factory should not reinvent primitives, and it should not absorb every new registry. The rule is **a curated supply chain, not an open firehose**. This section evaluates the repositories, component sources and agent skills worth adopting, and defines how a worker installs and invokes them without turning the site into a collage of other people's defaults.
 
+This section was expanded after independent live web research on 2026-11-04 using web search, the GitHub CLI and npm metadata; the findings below link to the discovered sources. Counts and versions are those observed on that date and should be re-checked before pinning.
+
 ### 6.0 Adoption tiers
 
 Every external artifact enters the factory at exactly one tier.
@@ -1473,8 +1477,8 @@ The motion stack is small on purpose. A few well-chosen libraries cover nearly e
 | [Three.js](https://threejs.org/) | WebGL engine | MIT | `pnpm add three` | Lane B scenes |
 | [React Three Fiber](https://r3f.docs.pmnd.rs/) + [drei](https://github.com/pmndrs/drei) | Declarative Three.js renderer and helpers | MIT | `pnpm add @react-three/fiber @react-three/drei` | Lane B scene graph, controls, loaders, post-processing helpers |
 | [Motion](https://motion.dev/) | React animation and gesture primitives (formerly Framer Motion) | MIT | `pnpm add motion` | Only where registry components already depend on it; not a second scroll system |
-| [transitions.dev](https://transitions.dev/) (Jakub Antalík) | 43+ crafted UI transitions on the site, 12 drop-in CSS transitions in the skill | Free for commercial use; no redistribution as a competing library; tooling MIT | `npx skills add Jakubantalik/transitions.dev` | Micro-interactions: dropdowns, modals, badges, text swaps, page slides |
-| [animations.dev](https://animations.dev/) (Emil Kowalski) | Judgement for how motion should feel: springs, easing, perceived speed | Course terms; not a code source | — | Reference for motion critique and timing decisions |
+| [transitions.dev](https://transitions.dev/) (Jakub Antalík) | 43+ transitions on the site; 30+ portable CSS transitions in the current skill (free and Pro) | Free personal/commercial use; no redistribution as a competing library; tooling MIT; Pro under separate terms | `npx skills add Jakubantalik/transitions.dev` or `npx transitions-dev add <name>` | Micro-interactions: dropdowns, modals, badges, text swaps, page slides |
+| [animations.dev](https://animations.dev/) (Emil Kowalski) | Interactive course on easing, timing, springs and performance; 13,000+ learners; CSS Animations and Framer Motion | Course terms; not a code licence | — | Motion judgement and critique; no code shipped |
 | [Codrops](https://tympanus.net/codrops/) | Technical breakdowns of award-tier sites | Article/code licences vary | — | Architecture and technique research; never copy a demo wholesale |
 | Awwwards, FWA, [Godly](https://godly.website/) | Curation and the current bar | Reference only | — | Calibration and watchlist |
 
@@ -1488,9 +1492,13 @@ The motion stack is small on purpose. A few well-chosen libraries cover nearly e
 Baseline install:
 
 ```sh
+# Both lanes: micro-interaction recipes
+npx skills add Jakubantalik/transitions.dev
+# or pull a single recipe without the skill:
+npx transitions-dev add card-resize
+
 # Editorial lane
 pnpm add gsap lenis
-npx skills add Jakubantalik/transitions.dev
 
 # Immersive lane
 pnpm add three @react-three/fiber @react-three/drei gsap lenis
@@ -1575,10 +1583,16 @@ Relume is strongest before code: sitemap, wireframe and section structure. Use i
 
 Skills and agent tools are **instructions plus capabilities**. A malicious or careless skill can read files, call the network or push code. Treat every third-party skill as source code: review it, pin it, vendor it, and register it through the DSH prompt configuration rather than letting it fetch itself at runtime.
 
+Command syntax varies by agent. In DSH, a worker loads a skill through the `skill` tool and follows its instructions; slash commands such as `/jury` or `/impeccable audit` are the Claude Code surface for the same `SKILL.md` playbooks. The factory documents the skill name and the playbook, not a specific slash command.
+
 | Skill or tool | What it gives | Licence | Install | Factory use |
 | --- | --- | --- | --- | --- |
-| [Impeccable](https://impeccable.style/) (`pbakaus/impeccable`) | Design vocabulary and commands (`polish`, `bolder`, `critique`, `audit`) plus a 62-rule deterministic slop/quality detector | Apache-2.0 | `npx impeccable install`; `npx impeccable detect` | Pre-PR polish and audit; CI gate; design-system documentation |
-| [transitions.dev skill](https://transitions.dev/) | 12 drop-in CSS transitions with documented hooks | Free commercial use; no redistribution | `npx skills add Jakubantalik/transitions.dev` | Micro-interaction recipes |
+| [Impeccable](https://impeccable.style/) (`pbakaus/impeccable`) | Design vocabulary and commands (`polish`, `bolder`, `critique`, `audit`) plus a 62-rule deterministic slop/quality detector; current CLI/skill 4.8.0 | Apache-2.0 | `npx impeccable install`; `npx impeccable detect` | Pre-PR polish and audit; CI gate; design-system documentation |
+| [juliobsz/skills](https://github.com/juliobsz/skills) (`/awwwards`, `/jury`) | Award-caliber build skill and a jury-style scoring skill with desktop, phone, reduced-motion and keyboard captures plus LCP/CLS/FPS/axe evidence | MIT | `npx skills add juliobsz/skills` | `/jury` as an independent design QA; reference files for direction; not the one-line autopilot |
+| [Awwwards MCP](https://github.com/INSANE0777/Awwwards-mcp) | MCP server: search Awwwards with screenshots, design DNA, motion census, token export, band maps and build comparison | MIT; Awwwards data is personal/non-commercial inspiration only | `npx -y awwwards-mcp` | Optional structured inspiration; see the guardrails below |
+| [Award-Caliber Websites skill](https://github.com/S3YED/appie-kit) | Seven-dimension framework: concept, narrative, visual system, interaction, usability, execution, content | MIT | Vendor the single `SKILL.md`; do not install the whole kit | Checklist and critique vocabulary; not a house style |
+| [Website Studio Harness](https://github.com/sohamxi/website-studio-harness) | Eight-agent studio pipeline, 100-point rubric and adversarial critique loop | MIT | `npx skills add sohamxi/website-studio-harness` or `npx website-studio-harness` | Pilot only; too much ceremony for a one-page site |
+| [transitions.dev skill](https://transitions.dev/) | 30+ portable CSS transitions with documented hooks; a CLI for one-off installs | Free commercial use; no redistribution; Pro under separate terms | `npx skills add Jakubantalik/transitions.dev`; `npx transitions-dev add <name>` | Micro-interaction recipes |
 | [REA](https://rea.tools/) (`morluto/rea`) | MCP/CLI for reverse-engineering binaries, apps, JavaScript/Electron and websites; evidence-based analysis | MIT | `pnpm add -D rea-agents`; `pnpm exec rea-agents setup .` | Authorized reference analysis: DOM, runtime behaviour, animation architecture |
 | [DSH REA adapter](https://github.com/zhaofeng130/dsh-rea) | Registers the `reverse-engineer-anything` skill plus `rea` and `rea_doctor` tools in DSH sessions | Community adapter; assess licence and maintenance | `dsh plugin --profile <profile> add github:zhaofeng130/dsh-rea` | Optional DSH integration; not required for REA itself |
 | [Firecrawl](https://firecrawl.dev/) | Scrape, crawl, map, search and interact with pages; Markdown, HTML, screenshots, structured JSON | AGPL-3.0 for self-hosting; hosted service terms | `pnpm add -D firecrawl`; `FIRECRAWL_API_KEY` | Reference discovery, content inventory, sitemaps, screenshots |
@@ -1588,6 +1602,8 @@ Skills and agent tools are **instructions plus capabilities**. A malicious or ca
 #### Impeccable: the taste gate
 
 Impeccable is the closest thing to an automated design reviewer that is useful rather than noisy. It installs a skill and a deterministic detector, works with DeepSeek Harness, and writes project context that later commands read.
+
+Current release: CLI and skill 4.8.0 (2026-10-26). The skill now infers the job type — blank slate, new page, section, redesign or scoped refinement — and `/impeccable craft` is deprecated in favour of those paths ([releases](https://github.com/pbakaus/impeccable/releases)). The factory's explicit workflow below stays the same.
 
 Factory usage:
 
@@ -1599,6 +1615,17 @@ Factory usage:
 6. Do not run `bolder` or `overdrive` without the brief; those commands amplify, and amplification of a weak direction is still slop.
 
 Security and cost note: Impeccable's live mode can spawn an external coding CLI with approvals or sandboxing disabled. The factory disables live-apply (`IMPECCABLE_LIVE_COPY_AGENT=off`), runs it only in a local checkout, and never exposes it to a deployed site or a production CSP.
+
+#### Award-caliber skills: what is real
+
+The live research found a growing family of "award-winning website" skills. A few are worth knowing, and none replaces the brief, the rubric or the human creative director.
+
+- **`juliobsz/skills` (`/awwwards`, `/jury`)** is the strongest public implementation found (MIT, ~1.1k stars). `/jury` is the useful half for the factory: it captures one page of each type on desktop, a throttled phone, reduced motion and the keyboard; measures LCP, CLS, FPS, axe and hover feedback; and writes a cited scorecard. `/awwwards` is more opinionated: it assumes a one-line prompt, defaults to Next.js, and picks Astro for animation-heavy static showcases. That conflicts with the factory's brief-first model and lane defaults, so adopt `/jury` and the reference files, not the autopilot. Its README is honest about the limits: long sessions, heavy token use, model-dependent quality and placeholder content.
+- **`award-caliber-websites` (Appie)** encodes a seven-dimension framework — concept, narrative, visual system, interaction, usability, execution and content — with a premise-first workflow. Vendor the single MIT `SKILL.md` as a critique checklist; do not install the 155-skill kit around it.
+- **`website-studio-harness`** is an eight-agent, ten-phase studio with a 100-point rubric and an adversarial gauntlet. It is an interesting reference for a larger factory, but it is too much machinery for a one-page site and had little adoption at the time of research.
+- **A skill named "award-winning" is not evidence.** Review the `SKILL.md`, licence, maintenance and actual output. If a skill imposes a house style or skips the brief, it is a slop accelerator.
+
+The factory's own rubric ([§3.5](#35-the-craft-rubric)) remains authoritative; external jury skills are inputs to it.
 
 #### REA: understand references, do not clone them
 
@@ -1646,6 +1673,28 @@ Usage rules:
 - Store only what the audit needs; remove PII and client-confidential material.
 - Record the URL, date and licence status alongside every captured asset.
 - Pair every scrape with Playwright measurements and a human-written "borrow / avoid" note.
+
+#### Awwwards MCP: structured inspiration, not a source of assets
+
+The live research surfaced [`awwwards-mcp`](https://github.com/INSANE0777/Awwwards-mcp) (MIT, ~400 stars), a free MCP server that gives agents a searchable Awwwards index with screenshots, design DNA, award history, motion census, scroll maps and an `export_design_tokens` tool.
+
+```sh
+npx -y awwwards-mcp
+```
+
+It requires Node ≥ 22.13 and no API key. The core index is local and offline; browser-backed tools such as `capture_live_site`, `analyze_page_structure`, `record_site_motion` and `verify_build` need Playwright and ffmpeg installed side by side. Register it as an MCP server in the research worker's environment; the package README documents the common client configurations.
+
+Factory use:
+
+- Search references by colour, tag, technology or award; pull design DNA and motion fingerprints into `reference-audit.md`.
+- Use `export_design_tokens` as evidence of a reference's palette and type, not as a token set to copy; map it through the brief and the factory tokens.
+- Use `verify_build` as an optional similarity check, never as the quality gate. Similarity to a reference is not craft.
+
+Guardrails:
+
+- The project documents several tools as **personal, non-commercial inspiration use**, with polite scraping (about one request per second, robots.txt) and media URLs for reference only. Do not ship Awwwards screenshots, media or design DNA as client assets, and check Awwwards' terms before commercial use.
+- It does not replace the factory's own Playwright audit, REA analysis or human review.
+- Cache results and do not poll the live index on every turn.
 
 #### The reference audit pipeline
 
@@ -1715,13 +1764,17 @@ The factory supports three install sets: baseline (every site), lane-specific (e
 | Three.js | Dependency | `pnpm add three` | lockfile | Lane B scene | WebGL fallback + fps | MIT |
 | React Three Fiber + drei | Dependency | `pnpm add @react-three/fiber @react-three/drei` | lockfile | Lane B scene graph | Scene smoke test | MIT |
 | Motion | Dependency | `pnpm add motion` | lockfile | Registry components that need it | Bundle budget | MIT |
-| transitions.dev | Skill | `npx skills add Jakubantalik/transitions.dev` | vendor commit | Micro-interactions | Reduced-motion + visual | Free commercial, no redistribution |
+| transitions.dev | Skill + CLI | `npx skills add Jakubantalik/transitions.dev`; `npx transitions-dev add <name>` | vendor commit | Micro-interactions | Reduced-motion + visual | Free/Pro terms, no redistribution |
 | shadcn/ui CLI | Tool | `pnpm dlx shadcn@latest init` | `shadcn` version | Primitives and registry installs | Component axe test | MIT |
 | Aceternity UI | Vendored | `npx shadcn@latest add @aceternity/<name>` | commit | Selected marketing effects | Perf + a11y + de-default review | Free commercial, no redistribution |
 | Magic UI | Vendored | `pnpm dlx shadcn@latest add @magicui/<name>` | commit | Selected marketing sections | Perf + a11y + de-default review | MIT |
 | 21st.dev | Registry | `npx @21st-dev/cli@latest init --client <client>`; `npx skills add 21st-dev/skill` | CLI lockfile | Discovery, then vendor | Per-component licence review | Varies |
 | Relume Library | Commercial | `pnpm add @relume_io/relume-ui @relume_io/relume-tailwind` | lockfile | Wireframe and section structure | Restyle + a11y review | Relume terms |
 | Impeccable | Tool + skill | `npx impeccable install` | vendor config | `critique`, `audit`, `polish`; `detect` in CI | Exit code + JSON artifact | Apache-2.0 |
+| `juliobsz/skills` | Skill pack | `npx skills add juliobsz/skills` | vendor commit | `/jury` independent QA; references | Scorecard + evidence | MIT |
+| Awwwards MCP | Research MCP | `npx -y awwwards-mcp` | npm version | Reference search, design DNA, motion census | `get_index_status` + audit notes | MIT; data restrictions |
+| Award-Caliber Websites | Skill | Vendor one `SKILL.md` from `S3YED/appie-kit` | commit | Critique checklist | Review note | MIT |
+| Website Studio Harness | Skill + CLI | `npx skills add sohamxi/website-studio-harness` | commit | Pilot only | Run report | MIT |
 | REA | Tool + skill | `pnpm add -D rea-agents`; `pnpm exec rea-agents setup .` | lockfile | Authorized reference analysis | `rea_doctor` evidence | MIT |
 | DSH REA adapter | Plugin | `dsh plugin --profile <profile> add github:zhaofeng130/dsh-rea` | commit/tag | DSH `rea`/`rea_doctor` tools | Tool smoke test | Community; assess |
 | Firecrawl | Dependency + API | `pnpm add -D firecrawl` | lockfile | Reference discovery and content | Cached audit artifact | AGPL-3.0 / hosted terms |
@@ -1731,7 +1784,7 @@ The factory supports three install sets: baseline (every site), lane-specific (e
 
 | Stage | Tool | Command or action | Artifact |
 | --- | --- | --- | --- |
-| Research | Firecrawl, Playwright, REA | `pnpm factory:research <url>` | `reference-audit.md`, `tokens.reference.json` |
+| Research | Firecrawl, Playwright, REA, Awwwards MCP (optional) | `pnpm factory:research <url>` | `reference-audit.md`, `tokens.reference.json` |
 | Direction | Impeccable, creative director | `/impeccable init`; direction memo | `PRODUCT.md`, `DESIGN.md`, `decisions.md` |
 | Scaffold | shadcn CLI, factory registry | `pnpm factory:component add @factory/<name>` | Vendored source with provenance |
 | Build | transitions.dev, GSAP/Lenis | `/skill transitions-dev`; motion layer | Components and motion |
@@ -1759,6 +1812,7 @@ Doctor additions:
 | Check | Command or condition | Failure |
 | --- | --- | --- |
 | Impeccable installed and runnable | `npx impeccable detect --list-rules` | Print install command |
+| Awwwards MCP index healthy when research is enabled | `get_index_status` via the MCP client | Fall back to Firecrawl/Playwright |
 | REA available when enabled | `rea --version` or configured `DSH_REA_CLI` | Disable REA for the ticket |
 | Firecrawl key present when research is enabled | `FIRECRAWL_API_KEY` exists; never print it | Research step blocked |
 | shadcn CLI version pinned | `pnpm dlx shadcn@<pinned> --version` matches the toolchain | Regenerate lock |
@@ -1769,9 +1823,10 @@ Doctor additions:
 
 - **Pin every install.** Use `pnpm add` with the lockfile; avoid unpinned `npx` in the build loop. When a registry requires `npx`, pin the package version and review the fetched source.
 - **Review before install.** A component or skill is code; read it, check the licence, check the maintainer, and record the decision.
-- **Network allowlist.** Limit worker egress to npm, the skills registry, Firecrawl, 21st.dev, Impeccable and the client's own domains; log outbound calls.
+- **Network allowlist.** Limit worker egress to npm, the skills registry, Firecrawl, Awwwards, 21st.dev, Impeccable, GitHub and the client's own domains; log outbound calls.
 - **Secrets in env only.** Firecrawl, 21st and hosting keys live in the environment, never in prompts, briefs, screenshots or commits.
 - **No private content.** Do not scrape authenticated pages, private Feishu content or client-confidential material; do not send it to third-party APIs.
+- **Respect inspiration sources.** Awwwards MCP data is documented as personal/non-commercial inspiration; do not ship its media, screenshots or design DNA as client assets.
 - **Cost controls.** Cache scrapes by URL hash; cap Firecrawl crawls per ticket; use the smallest model that passes; count token and API spend per accepted site.
 - **Licence hygiene.** Keep licence texts, record the source and date, and re-check when a component is updated.
 - **Remove unused code.** Vendored components that are not rendered are deleted before review.
@@ -1783,7 +1838,8 @@ Doctor additions:
 | Baseline | `gsap`, `lenis`, Impeccable, transitions.dev skill | Every site |
 | Editorial extras | `shadcn/ui` primitives; `@relume_io/relume-ui` only if the Relume workflow is chosen | Editorial lane |
 | Immersive extras | `three`, `@react-three/fiber`, `@react-three/drei`, `motion` (if needed) | Immersive lane |
-| Research | `playwright` (already present), `firecrawl`, `rea-agents` | Reference-audit tickets |
+| Research | `playwright` (already present), `firecrawl`, `rea-agents`, `awwwards-mcp` (optional) | Reference-audit tickets |
+| Award and QA skills | `juliobsz/skills` (`/jury`); Appie `award-caliber-websites` (vendored) | Optional; pilot first |
 | Component sources | Aceternity, Magic UI, 21st, Relume | Vendored per site; never all at once |
 
 ---
@@ -2073,6 +2129,14 @@ jobs:
 34. Playwright — evaluating JavaScript in the page: <https://playwright.dev/docs/evaluating>
 35. GSAP standard licence: <https://gsap.com/standard-license>
 36. Motion: <https://motion.dev/>
+37. juliobsz/skills — `/awwwards` and `/jury` agent skills: <https://github.com/juliobsz/skills>
+38. Awwwards MCP: <https://github.com/INSANE0777/Awwwards-mcp>
+39. awwwards-mcp on npm: <https://www.npmjs.com/package/awwwards-mcp>
+40. transitions.dev repository: <https://github.com/Jakubantalik/transitions.dev>
+41. transitions-dev CLI on npm: <https://www.npmjs.com/package/transitions-dev>
+42. Impeccable releases: <https://github.com/pbakaus/impeccable/releases>
+43. Appie award-caliber-websites skill: <https://github.com/S3YED/appie-kit>
+44. Website Studio Harness: <https://github.com/sohamxi/website-studio-harness>
 
 ---
 
