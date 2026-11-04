@@ -5,7 +5,7 @@
 > **Scope:** research, architecture, and an actionable roadmap. This PR does not implement the factory.
 > **Audience:** the team operating the factory, the creative reviewers, and the agents that will run it.
 
-This document specifies an end-to-end **Autonomous Website Factory**: a system that takes a client brief, routes it through DeepSeek SuperAgent (`dsh-superagent`), builds the site in an isolated git worktree, verifies it with deterministic checks, and hands a human a reviewable pull request with a live preview and visual evidence. It covers the five areas requested in [issue #4](https://github.com/niall289/superagent-test/issues/4), plus a dedicated research section on the skills, repositories and UI libraries the factory should incorporate, requested in review:
+This document specifies an end-to-end **Autonomous Website Factory**: a system that takes a client brief, routes it through DeepSeek SuperAgent (`dsh-superagent`), builds the site in an isolated git worktree, verifies it with deterministic checks, and hands a human a reviewable pull request with a live preview and visual evidence. It covers the five areas requested in [issue #4](https://github.com/niall289/superagent-test/issues/4), plus a dedicated research section on the skills, repositories and UI libraries the factory should incorporate, and an independent landscape scan that places that research in the broader industry context:
 
 1. [Factory operating model](#1-factory-operating-model)
 2. [Framework and template evaluation](#2-framework-and-template-evaluation)
@@ -13,6 +13,7 @@ This document specifies an end-to-end **Autonomous Website Factory**: a system t
 4. [Skills and self-installation](#4-skills-and-self-installation)
 5. [Actionable roadmap](#5-actionable-roadmap)
 6. [Research: skills, repositories and UI libraries](#6-research-skills-repositories-and-ui-libraries)
+7. [Independent landscape scan](#7-independent-landscape-scan-the-frontier-of-autonomous-web-production)
 
 The recommendations are opinionated. Where two options are close, the document names a default, the trade-off, and the condition that should change it.
 
@@ -70,6 +71,16 @@ The recommendations are opinionated. Where two options are close, the document n
   - [6.2 Component and section libraries](#62-component-and-section-libraries)
   - [6.3 Advanced agent skills and toolchains](#63-advanced-agent-skills-and-toolchains)
   - [6.4 Self-installation and integration matrix](#64-self-installation-and-integration-matrix)
+- [7. Independent landscape scan](#7-independent-landscape-scan-the-frontier-of-autonomous-web-production)
+  - [7.0 Method and headline findings](#70-method-and-headline-findings)
+  - [7.1 The agent-skill and toolchain landscape](#71-the-agent-skill-and-toolchain-landscape)
+  - [7.2 How frontier teams structure the factory](#72-how-frontier-teams-structure-the-factory)
+  - [7.3 Substrates, registries and design workspaces](#73-substrates-registries-and-design-workspaces)
+  - [7.4 What is emerging](#74-what-is-emerging-signal-evidence-implication)
+  - [7.5 Frontier configuration](#75-frontier-configuration-adopt-pilot-watch-reject)
+  - [7.6 Revised reference architecture](#76-revised-reference-architecture)
+  - [7.7 Evaluation](#77-evaluation-what-to-measure-and-what-not-to-trust)
+  - [7.8 Bottom line](#78-bottom-line)
 - [Appendices](#appendices)
   - [A. Brief intake schema](#a-brief-intake-schema)
   - [B. Design QA checklist](#b-design-qa-checklist)
@@ -93,9 +104,11 @@ The recommended shape:
 | Lane A — Editorial Luxury | **Astro 7** + TypeScript + Tailwind 4 + GSAP + Lenis, static output | HTML-first, near-zero JS by default, strong content model, fast builds |
 | Lane B — Immersive 3D/Video | **Vite 8** + React 19 + React Three Fiber/Three.js + GSAP + Lenis | The least abstraction between agent and WebGL; fastest iteration |
 | Framework escape hatch | Next.js 16 only for app-like requirements (auth, commerce, ISR) | Heavier concept surface and build cost; rarely needed for award-tier marketing sites |
-| Preview | **Cloudflare Pages** preview deployment per PR | Per-commit URL, static output, cheap, fast |
+| Intake | Five-file spec pack + human direction checkpoint | Spec before code; the cheapest quality intervention |
+| Preview | **Cloudflare Pages** default, with a provider adapter for Vercel, Netlify or Railway | Per-commit URL, static output by default, room for full-stack clients |
 | Merge | **A person** merges every site PR | Design approval is human; the factory never self-merges |
-| Evidence | Playwright before/after captures + Lighthouse CI + axe | Makes craft reviewable without a local checkout |
+| Evidence | Playwright CLI captures + Argos visual review + Lighthouse CI + axe | Makes craft reviewable without a local checkout |
+| Components | Factory shadcn-compatible registry; public registries for discovery only | Code ownership; no runtime builder lock-in |
 | Skills | Versioned in the factory repo, registered through DSH prompt config | Agents load only the knowledge a task needs |
 | Repo | One factory monorepo first; split per client when isolation demands it | Shared tooling, one CI, small blast radius at low volume |
 
@@ -237,7 +250,7 @@ A failed prepare fails the ticket and records the output. It is not retried auto
 
 #### Stage 4 — Build
 
-The worker begins by writing `.factory/plan.md`: sections, content needs, motion plan, asset plan, risks and a token/time estimate. Then it builds in vertical slices — one section at a time — capturing a screenshot after each slice at 390, 768 and 1440 px. It self-scores against the rubric before asking for review. It opens the PR as a draft early only to bind the branch, and keeps it internal until the evidence is complete.
+The worker begins with the spec pack: `spec.md`, `design.md`, `plan.md`, `tasks.md` and `acceptance.md` ([§7.2](#72-how-frontier-teams-structure-the-factory)). For high-value sites it sends the design direction to the human for a one-message checkpoint before the expensive build; for a small site the PR review remains the gate. It then builds in vertical slices — one task or section at a time — capturing a screenshot after each slice at 390, 768 and 1440 px. It self-scores against the rubric before asking for review. It opens the PR as a draft early only to bind the branch, and keeps it internal until the evidence is complete.
 
 The worker must not expand the brief. A better idea becomes a note in `decisions.md` and, if valuable, a follow-up ticket.
 
@@ -326,7 +339,11 @@ Every ticket carries the same artifacts, whether the worker is human-supervised 
 
 ```text
 .factory/
-├── plan.md            # sections, content, motion, assets, estimate
+├── spec.md            # problem, audience, pages, scenarios, acceptance
+├── design.md          # concept, type, colour, imagery, motion, references
+├── plan.md            # stack, template, registry items, risks, estimate
+├── tasks.md           # atomic, ordered, testable tasks
+├── acceptance.md      # Given/When/Then, budgets, evidence matrix
 ├── decisions.md       # deviations from the template and why
 ├── evidence/
 │   ├── manifest.json  # url, viewport, theme, hash, timestamp
@@ -899,6 +916,8 @@ Research and component tooling (pinned with the repo; see [§6.4](#64-self-insta
 | rea-agents | 6.8.0 | Authorized reference analysis | Optional |
 | firecrawl | 4.51.0 | Reference discovery and content | Optional |
 | awwwards-mcp | 1.18.0 | Awwwards inspiration and design DNA | Optional |
+| `@playwright/cli` | 0.1.23 | Token-efficient browser verification | Yes |
+| `@argos-ci/cli` | 6.11.0 | Visual review upload | Optional |
 | juliobsz/skills | vendored commit | `/jury` independent design QA | Optional |
 | transitions.dev skill | vendored commit | Micro-interaction recipes | Yes |
 
@@ -1131,6 +1150,9 @@ website-factory/
 │   ├── prompts/                     # team prompt sections and overrides
 │   ├── skills/                      # one directory per skill
 │   ├── registry/                    # curated shadcn-compatible component registry
+│   ├── specs/                       # spec-pack templates (spec, design, plan, tasks, acceptance)
+│   ├── evals/                       # golden briefs, expected outcomes, benchmark notes
+│   ├── visual/                      # Argos config, screenshot matrix, baseline policy
 │   ├── reference-cache/             # cached Firecrawl/Playwright audits (gitignored)
 │   ├── templates/
 │   │   ├── editorial-serif/
@@ -1243,6 +1265,7 @@ Template variants to ship first:
 | `verify` | PR touching `sites/`, `packages/`, `factory/` | Install, doctor, lint, typecheck, test, build, design detector, axe, visual, Lighthouse, link check, size check | Yes |
 | `preview` | PR opened/synchronised | Deploy changed sites to Cloudflare Pages; comment URL + commit SHA | Yes for site PRs |
 | `production` | Push to `main` | Build, deploy, smoke test, post-deploy Lighthouse | Yes |
+| `visual-review` | PR synchronised | Playwright captures plus Argos upload; agent-readable build and diff evidence | Yes for site PRs (when configured) |
 | `factory-doctor` | Weekly + changes under `factory/` | Doctor, template smoke, dependency audit | No (alerts) |
 | `visual-baseline` | Manual dispatch with label `visual:update` | Regenerates baselines and uploads diff for review | No |
 
@@ -1255,6 +1278,7 @@ Cloudflare Pages gives every non-production branch a unique URL without extra in
 - Deploy: `npx wrangler pages deploy sites/<slug>/dist --project-name <slug> --branch pr-<number>`.
 - The workflow comments the URL, the commit SHA and the lane on the PR, and updates the comment on each push.
 - Previews are `noindex` and, for private clients, behind Cloudflare Access.
+- Keep the preview call behind a small provider adapter, so Vercel, Netlify or Railway can be used without changing the ticket workflow ([§7.2](#72-how-frontier-teams-structure-the-factory)).
 
 #### Evidence automation
 
@@ -1345,6 +1369,8 @@ Deliverables:
 - evidence script and PR template;
 - reference-audit script and authorization protocol;
 - curated component registry skeleton with provenance rules;
+- spec-pack templates and one golden brief;
+- Argos or equivalent visual-review spike;
 - one internal pilot brief (not a client) to exercise the loop end to end.
 
 Exit criteria: a pilot PR with a preview URL, before/after evidence, green checks and a human review in under one day.
@@ -1357,6 +1383,8 @@ Deliverables:
 - motion and content skills;
 - component registry v1 with approved, restyled sections;
 - Impeccable polish gate and detector thresholds in CI;
+- Argos visual-review integration and baseline policy;
+- five golden briefs and an eval dashboard;
 - rubric calibration with the creative director on three sites;
 - token/turn/CI metrics dashboard;
 - template versioning and drift check.
@@ -1383,7 +1411,7 @@ Deliverables:
 - per-client isolation decision and, if needed, repo split;
 - cost model (tokens, CI minutes, hosting) per site;
 - template upgrade cadence and janitor automation;
-- quarterly review of skills, component sources and licences;
+- quarterly review of skills, component sources, licences and benchmarks;
 - SLO review and prompt/skill tightening;
 - operator runbooks and incident playbook.
 
@@ -1427,6 +1455,9 @@ In order, each a small PR:
 14. **Immersive template** — R3F scene kit, fallback, video.
 15. **Production release** — production workflow, smoke, rollback runbook.
 16. **Maintenance** — weekly doctor, janitor, licence audit, upgrade policy.
+17. **Spec pack and evals** — five-file spec pack, ten golden briefs, quarterly tool comparison.
+18. **Visual review platform** — Argos integration, baseline policy, agent-readable evidence.
+19. **Preview provider adapter** — Cloudflare default, Vercel/Netlify/Railway adapters.
 
 Each ticket follows the same operating model it is building: worktree, branch, PR, evidence, human review.
 
@@ -1442,6 +1473,10 @@ These are deliberately left open; they need a decision from the team, not from a
 6. **Framework breadth:** support SvelteKit as a third lane, or keep two lanes until demand is proven?
 7. **Analytics and consent:** one default provider, or per-client choice with a shared consent wrapper?
 8. **Budget:** what token and CI-minute ceiling per site makes the factory economically better than a traditional build?
+9. **Visual review:** Argos as the default, Chromatic if Storybook becomes the catalog, or a commercial service for enterprise clients?
+10. **Preview provider:** is Cloudflare Pages sufficient, or should Vercel/Netlify adapters be maintained from day one?
+11. **Spec pack depth:** five short files per ticket, or the full Spec Kit/OpenSpec workflow for larger engagements?
+12. **Closed builders:** allow v0/Lovable/Bolt for prototypes and references, or keep the factory entirely code-first?
 
 ---
 
@@ -1844,6 +1879,282 @@ Doctor additions:
 
 ---
 
+## 7. Independent landscape scan: the frontier of autonomous web production
+
+### 7.0 Method and headline findings
+
+This section is deliberately independent of the curated list in §6. On 2026-11-04 I searched the open web and GitHub without a fixed vendor or library list, sorted repositories by stars, read the top project READMEs and official docs, checked licences and maintenance, and looked at the benchmarks and commercial services around autonomous web production. Star counts are approximate and volatile; they are a discovery signal, not a quality score.
+
+The headline: **the frontier is no longer "prompt a model to make a page".** It is a five-layer production system:
+
+1. **Portable skills** that encode method, not just snippets.
+2. **Spec-driven intake** that turns a brief into requirements, plan, tasks and acceptance criteria.
+3. **Registry-first assembly** that composes owned components instead of generating every primitive.
+4. **Browser and visual verification** that lets agents see what they built and compare it with a baseline.
+5. **Ephemeral preview and review** that puts a protected URL, visual diffs and comments in front of a human.
+
+The architecture in §1–§5 already has the right bones: DSH orchestration, one worktree per ticket, CI gates, previews and human review. §7 identifies what the broader industry has added around those bones, and what the factory should adopt, pilot, watch or reject.
+
+### 7.1 The agent-skill and toolchain landscape
+
+#### Methods and skills
+
+| Project (stars observed) | Licence | What it contributes | Factory verdict |
+| --- | --- | --- | --- |
+| [obra/superpowers](https://github.com/obra/superpowers) (≈312k) | MIT | A full methodology: interrogate the brief, write a spec, plan, then run subagent-driven development with TDD, YAGNI and DRY | **Adopt the pattern**, not the whole ceremony |
+| [anthropics/skills](https://github.com/anthropics/skills) (≈187k) | Mixed; many Apache-2.0, some source-available | Reference implementations and patterns for the Agent Skills standard | **Reference only**; check each skill's licence |
+| [github/spec-kit](https://github.com/github/spec-kit) (≈147k) | MIT | Spec-driven development: constitution → specify → plan → tasks → implement → converge | **Adopt the artifact shape** |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (≈113k) | MIT | Lifecycle skills and commands: define, plan, build, test, review, ship; `/build auto` after plan approval | **Adopt the lifecycle and gates** |
+| [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (≈110k) | MIT | Art direction, real reference images and a real-browser self-check instead of generic pages | **Pilot** as a design-quality skill |
+| [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) (≈74k) | MIT | Proposal → specs → design → tasks → apply → archive, in plain Markdown | **Adopt the spec pack structure** |
+| [bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) (≈55k) | Unclear; verify | Role-based agile AI development method | **Watch**; too heavy for a landing page |
+| [vercel-labs/skills](https://github.com/vercel-labs/skills) / [skills.sh](https://skills.sh) (≈38k) | MIT | The `npx skills` CLI and a public registry that installs into 70+ agents | **Use for vendoring**, not runtime installs |
+| [buildermethods/agent-os](https://buildermethods.com/agent-os) (≈5.6k) | MIT | Injects codebase standards and better specs into coding agents | **Watch**; useful for multi-site standards |
+
+What this landscape actually shows:
+
+- **The skill standard is real.** Skills are folders with a `SKILL.md` plus optional scripts and references, portable across Claude Code, Codex, Cursor, Gemini CLI, OpenCode and others ([agentskills.io](https://agentskills.io)). The factory should treat them as versioned source, not magic.
+- **There are two schools.** Methodology skills (superpowers, agent-skills, the spec frameworks) encode *how to work*; domain skills (taste-skill, Impeccable, transitions.dev, award skills) encode *how to make this kind of thing*. The frontier is a small composition of both, not a 100-skill install.
+- **Star count is not audit.** A 100k-star skill can still ship a house style, a stale technique or a prompt-injection risk. Review, vendor and pin.
+- **Harness portability is increasing.** The same skill can run under many agents, which reduces lock-in and validates DSH's decision to keep skills as text registered through prompt configuration.
+
+#### Browser, visual verification and preview
+
+| Project (stars observed) | Licence | What it contributes | Factory verdict |
+| --- | --- | --- | --- |
+| [browser-use](https://github.com/browser-use/browser-use) (≈120k) | MIT | Python library for AI browser agents; open-source core plus hosted cloud | **Pilot** for exploratory flows, not CI |
+| [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) (≈39k) | Apache-2.0 | Browser automation over MCP with accessibility snapshots | **Use for persistent exploratory loops** |
+| [microsoft/playwright-cli](https://github.com/microsoft/playwright-cli) (≈15k) | Apache-2.0 | CLI plus skills for common browser actions; token-efficient for coding agents | **Adopt as the primary browser tool** |
+| [web-infra-dev/midscene](https://github.com/web-infra-dev/midscene) (≈15.5k) | MIT | AI-vision E2E testing in natural language | **Pilot** for flow and visual checks |
+| [argos-ci/argos](https://argos-ci.com/) (≈656) | MIT | Open-source visual review platform built for teams and AI agents; CLI, MCP and REST | **Adopt** as the visual review layer |
+| [lost-pixel/lost-pixel](https://github.com/lost-pixel/lost-pixel) (≈1.7k) | MIT | Open-source visual regression alternative to Percy and Chromatic | **Reject for new work**: the team is [joining Figma and sunsetting it](https://lost-pixel.com/blog/lost-pixel-team-is-joining-figma) |
+| [Chromatic](https://www.chromatic.com/) | Commercial | Component-level visual review for Storybook | **Consider** if Storybook becomes the catalog |
+| [Percy](https://percy.io/) / Applitools | Commercial | Visual review with AI noise filtering | **Consider** for enterprise clients |
+| [Railway PR environments](https://railway.com/guides/preview-deployments-with-pr-environments) | Commercial | Full-stack preview environment per pull request, including services and databases | **Pilot** for full-stack clients |
+| [Preevy](https://preevy.dev/) (≈2.2k) | Apache-2.0 | Preview environments in your own cloud | **Watch**; useful for self-hosted constraints |
+| [Vercel preview deployments](https://vercel.com/docs/deployments/preview-deployments) / [Netlify Deploy Previews](https://docs.netlify.com/deploy/deploy-types/deploy-previews/) | Commercial | Per-PR URLs, comments, deployment protection and review workflows | **Support as providers** behind an adapter |
+| [Cloudflare Pages preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) | Commercial | Per-branch previews for static output | **Keep as the default** |
+
+The most important correction from this scan is **CLI + skills versus MCP**. Playwright's own documentation now says coding agents should prefer the CLI and skills because it avoids loading large tool schemas and verbose accessibility trees into context; MCP remains better for persistent state, rich introspection and long-running exploratory loops ([playwright-cli](https://github.com/microsoft/playwright-cli), [playwright-mcp](https://github.com/microsoft/playwright-mcp)). DSH's shell + skills + background-job model is therefore aligned with the frontier, not behind it. The factory should add one browser CLI, not a stack of MCP servers.
+
+#### Builders, registries and templates
+
+| Project (stars observed) | Licence | What it contributes | Factory verdict |
+| --- | --- | --- | --- |
+| [OpenDesign](https://github.com/nexu-io/open-design) (≈106k) | Apache-2.0 | Collaborative AI design-agent workspace with design systems, templates, skills and plugins | **Pilot** for human/agent direction work; not production delivery |
+| [Onlook](https://github.com/onlook-dev/onlook) (≈27k) | Apache-2.0 | AI-first visual design tool that edits real code; early access | **Watch**; useful for designer collaboration |
+| [Webstudio](https://github.com/webstudio-is/webstudio) (≈9k) | AGPL-3.0 | Open-source visual website builder and Webflow alternative | **Reject as production dependency** unless the client accepts AGPL |
+| [Plasmic](https://github.com/plasmicapp/plasmic) (≈7k) | MIT | Visual builder for React that integrates with a codebase | **Watch**; runtime coupling |
+| [Builder.io](https://github.com/BuilderIO/builder) (≈8.9k) | MIT | Visual development for React, Vue, Svelte and Qwik | **Watch**; runtime coupling |
+| [GrapesJS](https://github.com/GrapesJS/grapesjs) (≈26k) | Open source; verify | Web-builder framework for embedding a page builder | **Watch**; only for client-editing products |
+| [shadcn/ui registry](https://ui.shadcn.com/docs/registry) | MIT | Private registries, namespaces, authentication and code distribution | **Adopt** as the factory registry format |
+| [21st.dev](https://21st.dev/) | Registry; per-component licences | Discovery and installation of community React/Tailwind components | **Discovery only**, then vendor |
+| [v0](https://v0.dev/) / [Lovable](https://lovable.dev/) / [Bolt](https://bolt.new/) | Closed | One-shot app and site generation with hosted previews | **Prototype/reference**, never the delivery pipeline |
+| [Framer](https://www.framer.com/) / [Webflow](https://webflow.com/) | Closed | Fast visual site production with hosted infrastructure | **Handoff/reference**, not the factory substrate |
+
+The registry model is now the dominant way to distribute front-end components: source is copied into the project, owned, edited and reviewed, instead of being locked behind a runtime package. That is exactly the factory registry in [§6.2](#62-component-and-section-libraries). The scan strengthens the recommendation: **own the registry, use public registries for discovery, and never let a closed builder become the production substrate.**
+
+### 7.2 How frontier teams structure the factory
+
+#### a) Brief intake and automated specification
+
+The strongest pattern across Spec Kit, OpenSpec, superpowers and Agent Skills is the same: **do not go from brief to code.** Go from brief to a small, reviewable specification, then plan, then tasks, then code.
+
+| Pattern | What it looks like | Factory mapping |
+| --- | --- | --- |
+| Constitution / standards | Project-wide rules for quality, testing, accessibility and maintainability | `AGENTS.md`, `DESIGN.md`, the craft rubric |
+| Spec | Problem, audience, pages, content, scenarios and acceptance criteria | `.factory/spec.md` |
+| Design direction | Concept, type, palette, imagery, motion, references and anti-references | `.factory/design.md` plus the direction memo |
+| Plan | Stack, template, registry items, risks, estimate and budget | `.factory/plan.md` |
+| Tasks | Atomic, ordered, testable units | `.factory/tasks.md` |
+| Acceptance | Given/When/Then scenarios, budgets and evidence matrix | `.factory/acceptance.md` |
+| Converge | Loop implement → verify → fix until acceptance passes | The worker/CI loop |
+
+The factory does not need a second workflow engine. It needs the **artifact shape**: five short files, each under a page, that a human can approve and a worker can execute. The orchestrator still writes the mandate; the worker writes the spec pack on its first turn; the human approves the direction before the build gets expensive.
+
+Two guardrails matter:
+
+- **Do not turn a landing page into a 40-page PRD.** The spec pack is a thinking tool, not bureaucracy. One page per file is usually enough.
+- **Acceptance must be testable.** "Premium and immersive" is a direction; "hero LCP ≤ 2.5 s, no horizontal scroll at 390 px, quote form handles success and error" is acceptance.
+
+#### b) Multi-turn generation and component assembly
+
+The frontier pattern is **planner + executor + critic**, not one long chat turn.
+
+- **Superpowers** turns the brief into a spec, then a plan, then runs subagent-driven development: an agent works each engineering task, inspects and reviews the result, and continues. It reports working autonomously for hours without deviating from the plan.
+- **Agent Skills** provides a lifecycle (`/spec`, `/plan`, `/build`, `/test`, `/review`, `/ship`) and a `/build auto` mode that implements every task in one approved pass, pausing on failures or risky steps.
+- **The factory** should run one worker per ticket, with at most two specialist subagents: a design critic and an independent verification agent. An eight-agent studio is interesting (see `website-studio-harness` in §6.3) but too much coordination overhead for a one-page site.
+
+Component assembly is the other half. The frontier does not generate every button and card from scratch; it composes from a registry, then adapts. The factory's registry-first rule is correct, and the scan adds three refinements:
+
+1. **Plan the composition before writing component code.** `tasks.md` names the registry items and the new sections.
+2. **Commit per task or per section.** Small commits survive interruption and make review possible.
+3. **Use the strongest model for direction, cheaper models for mechanical edits, and an independent model for critique.** Homogeneous models share blind spots.
+
+#### c) Visual regression, screenshots and performance gates
+
+No single check is sufficient. The frontier uses layers, each catching a different class of failure:
+
+| Layer | Catches | Tooling |
+| --- | --- | --- |
+| Build and types | Broken code, missing imports, schema errors | TypeScript, framework build |
+| Unit and content tests | Content model, utilities, routing | Vitest, content schema tests |
+| Browser screenshots | Missing content, layout breakage, console errors | Playwright CLI + skill |
+| Visual diff | Unintended visual change against the accepted baseline | [Argos](https://argos-ci.com/) (open source), Chromatic (Storybook), Percy/Applitools (commercial) |
+| AI-vision and flow checks | A user flow that is broken despite a correct screenshot | Midscene, browser-use |
+| Accessibility and performance | Contrast, focus, semantics, LCP/CLS/INP budgets | axe, Lighthouse CI |
+| Human rubric | Taste, specificity, art direction | Creative director |
+
+Two lessons from the scan:
+
+- **Use a visual review platform, not only committed snapshots.** Argos captures in the real browser, renders visual diffs, and exposes builds, snapshots and review state over CLI, MCP and REST so an agent can fetch the evidence and fix the cause. That is the agent-native version of "look at the screenshot".
+- **Beware the sunsetting dependency.** Lost Pixel was a credible open-source Percy/Chromatic alternative and is now sunsetting as the team joins Figma. A visual QA layer is infrastructure; choose an actively maintained project or a commercial service with a migration path.
+
+AI-vision tools are useful for exploration and flow checks, but they are not a substitute for a pixel baseline or a human review. They can be confidently wrong, and their findings need evidence.
+
+#### d) Ephemeral preview environments and client review
+
+Preview deployment has become the **review surface**, not just a deployment convenience.
+
+| Provider | Best for | Review features | Cost/complexity |
+| --- | --- | --- | --- |
+| Cloudflare Pages | Static Astro/Vite sites | Per-branch preview, custom headers, Access protection | Low |
+| Vercel | Next.js and full-stack apps | Preview URLs, comments pinned to the live page, deployment protection, team review | Medium |
+| Netlify | Static and framework sites | Deploy Previews, deploy protection, agent runners | Medium |
+| Railway | Full-stack apps with services and databases | PR environments that clone the base environment per pull request | Medium–high |
+| Preevy | Teams needing previews in their own cloud | Preview environments with minimal configuration | Self-hosted |
+| Jenkins X / Ergomake | Kubernetes-native teams | Preview environments per PR | High |
+
+The frontier review loop is:
+
+```text
+worker pushes commit
+  → preview deployment for that commit
+  → visual diffs and screenshots attached to the PR
+  → human comments on the preview or the PR
+  → worker fixes, re-verifies and resolves threads
+  → human approves; merge triggers production
+```
+
+For the factory, the review surface should stay **one URL and one PR thread**. The client should not need a local checkout, a Figma file or a separate review tool. The preview must be protected, `noindex`, pinned to a commit and expire when the PR closes. Vercel's live-page comments and Netlify's Deploy Previews are strong examples; Cloudflare Pages plus PR evidence is sufficient for the default static lane.
+
+### 7.3 Substrates, registries and design workspaces
+
+The substrate question is not "which framework" alone; it is **where the design system, components and content live**.
+
+- **Registries are the distribution layer.** shadcn's registry format (private registries, namespaces, authentication) is the strongest open pattern; 21st.dev, v0-style generation, Magic UI, Aceternity and Relume all distribute source or source-like artifacts. The factory registry remains the only approved production source.
+- **Design workspaces are the collaboration layer.** OpenDesign and Onlook are credible open-source spaces where a human and an agent can iterate on direction and prototypes. They are useful *before* the build and for client workshops; they are not the delivery pipeline.
+- **Visual builders are the client-editing layer.** Webstudio (AGPL), Plasmic, Builder.io and GrapesJS can give a client a visual editor, but they add runtime coupling and licensing constraints. Start with Git/MDX content and add a builder only when a client contract requires it.
+- **Closed builders and one-shot generators are the prototype layer.** v0, Lovable, Bolt, Framer and Webflow are excellent for a quick concept or a handoff, but they weaken repo control, CI, testability and long-term ownership. Use them to explore, not to deliver the factory's output.
+- **Template ecosystems are the starting layer.** Astro themes, Next.js templates and Tailwind Plus provide structure; a template is a starting point, not a design. The "template as a skill" pattern (a skill that clones a starter) is useful for speed but must still pass the brief, rubric and QA.
+
+For content, the frontier is still pragmatic: Git/MDX for developer-owned sites, a headless CMS ([Sanity](https://www.sanity.io/), [Payload](https://payloadcms.com/), [Storyblok](https://www.storyblok.com/)) when a client needs editing, and a clean content schema either way. Do not add a CMS to solve a design problem.
+
+### 7.4 What is emerging: signal, evidence, implication
+
+| Signal | Evidence | Implication for the factory |
+| --- | --- | --- |
+| Skills are portable infrastructure | `agentskills.io`, `npx skills` into 70+ agents, 100k+ star skill repositories | Vendor and pin skills; treat them as code; keep them harness-agnostic |
+| Spec-driven development is mainstream | Spec Kit ≈147k stars, OpenSpec ≈74k, Agent OS, BMAD | Add a short spec pack to every ticket; human approves direction |
+| CLI + skills beat MCP for coding agents | Playwright's own CLI-vs-MCP guidance | Add the Playwright CLI skill; reserve MCP for persistent/exploratory tools |
+| Browser self-verification is expected | Playwright, browser-use, Midscene, Awwwards MCP | The worker must inspect its own output in a real browser before review |
+| Visual review is becoming agent-native | Argos CLI/MCP/REST, Chromatic, Percy AI, Lost Pixel sunsetting | Add a maintained visual review platform with machine-readable evidence |
+| Preview environments are review surfaces | Vercel comments, Netlify Deploy Previews, Railway PR environments | Keep one protected preview URL per commit as the client review surface |
+| Registries are the component distribution model | shadcn registry, 21st.dev, v0-style source generation | Own the factory registry; use public registries for discovery |
+| Design workspaces are emerging | OpenDesign ≈106k, Onlook ≈27k | Pilot for human/agent direction; do not make them the production substrate |
+| One-shot builders remain prototypes | v0, Lovable, Bolt, Framer, Webflow | Use for concept and handoff; not for governed delivery |
+| Benchmarks are useful but immature | WebArena, Design2Code, WebDev Arena | Use external benchmarks as calibration; keep an internal golden-task eval |
+| Taste skills are commoditising | taste-skill, Impeccable, award-caliber skills | Differentiation moves to brief quality, assets, art direction and verification |
+| Skill/MCP supply chain is a real risk | Skills run with tool access; MCP servers can read the network | Review, pin, vendor and isolate; no unpinned runtime installs |
+
+### 7.5 Frontier configuration: adopt, pilot, watch, reject
+
+| Area | Adopt now | Pilot | Watch | Reject |
+| --- | --- | --- | --- | --- |
+| Intake and spec | Five-file spec pack; testable acceptance | Spec Kit/OpenSpec CLI as an authoring aid | Agent OS standards injection | A 40-page PRD for a landing page |
+| Skills | A method skill (superpowers/agent-skills pattern) plus 4–6 domain skills | taste-skill for art direction | BMAD role playbooks | Installing 100 skills "just in case" |
+| Browser | Playwright CLI + skill | Playwright MCP for long exploratory sessions; Midscene/browser-use | Hosted browser clouds | Autonomous browser agents as CI gates |
+| Visual QA | Playwright captures + Argos | Chromatic if Storybook; Percy/Applitools for enterprise | New AI visual-review startups | Lost Pixel for new work |
+| Preview | Cloudflare Pages default | Vercel/Netlify adapters; Railway/Preevy for full-stack | Self-hosted Kubernetes previews | Custom preview infrastructure |
+| Components | Factory shadcn registry | 21st/Relume discovery; OpenDesign/Onlook for direction | Plasmic/Builder.io for client editing | Runtime builder lock-in; AGPL in proprietary delivery |
+| Agent runtime | DSH orchestrator + worker | Specialist subagents (design critic, verifier) | Alternative harnesses | A second orchestration framework beside DSH |
+| Evals | Internal golden briefs + rubric | External WebArena/Design2Code/WebDev Arena calibration | New benchmarks | A benchmark score as the acceptance gate |
+| Observability | Tokens, turns, CI minutes, review minutes | Trace/observability tooling | Agent analytics products | Unmeasured "autonomy" |
+
+### 7.6 Revised reference architecture
+
+```mermaid
+flowchart LR
+  B[Brief<br/>GitHub / Feishu] --> S[Spec pack<br/>spec · design · plan · tasks · acceptance]
+  S --> H{Human direction<br/>approved?}
+  H -->|no| S
+  H -->|yes| R[Registry selection<br/>factory sections + tokens]
+  R --> W[Worker + subagents<br/>build in slices, commit per task]
+  W --> V[Verification<br/>Playwright CLI · Argos · axe · Lighthouse]
+  V -->|fail| W
+  V --> P[Preview<br/>Cloudflare / Vercel / Railway]
+  P --> PR[PR with visual diffs + evidence]
+  PR --> HR{Human review}
+  HR -->|changes| W
+  HR -->|approve + merge| D[Production + smoke]
+  D --> E[Evals + metrics<br/>golden briefs · tokens · minutes]
+  E --> W
+```
+
+| Stage | Current baseline (§1) | Frontier addition | Gate |
+| --- | --- | --- | --- |
+| Intake | Brief form, orchestrator assessment | Spec pack with testable acceptance | Human approves direction |
+| Prepare | Worktree, scaffold, doctor | Registry selection and template pin | Prepare succeeds |
+| Build | Worker, plan, section slices | Method skill + specialist subagents | Tasks complete; budget guard |
+| Verify | CI, axe, Lighthouse, visual snapshots | Playwright CLI, Argos visual review, Midscene pilot | CI green; visual diff reviewed |
+| Preview | Cloudflare Pages | Provider adapter for Vercel/Netlify; Railway for full-stack | Protected per-commit URL |
+| Review | PR evidence, human rubric | Inline live-page comments or visual diff links | Approval covers merged commit |
+| Release | Merge, production workflow | Smoke test, post-deploy Lighthouse, rollback | Production healthy |
+| Learn | Factory metrics | Golden-task evals and quarterly tool review | Cost and quality trend |
+
+The delta is not a rewrite. It is five additions to the existing factory:
+
+1. **A spec pack** (`.factory/spec.md`, `design.md`, `plan.md`, `tasks.md`, `acceptance.md`) written by the worker and approved by the human before the expensive build.
+2. **A browser verification step** using the Playwright CLI skill, with MCP reserved for exploratory sessions.
+3. **A visual review platform** (Argos by default) that turns screenshots into reviewable diffs with machine-readable evidence.
+4. **A preview-provider adapter** so the factory can use Cloudflare, Vercel, Netlify or Railway without changing the ticket workflow.
+5. **An internal eval harness** of golden briefs, scored with the same rubric, to compare models, skills and tools quarterly.
+
+### 7.7 Evaluation: what to measure, and what not to trust
+
+External benchmarks are useful for calibration, not acceptance:
+
+- **[WebArena](https://github.com/web-arena-x/webarena)** measures autonomous web navigation and task completion in realistic sites.
+- **[Design2Code](https://github.com/NoviScl/Design2Code)** measures screenshot-to-code fidelity and layout similarity.
+- **[WebDev Arena](https://web.lmarena.ai/)** measures human preference on web-development tasks.
+
+They do not measure whether a site is specific to a brand, accessible, fast, maintainable or honest. Public leaderboards can saturate and be gamed, and a high score on a benchmark page is not a high score on a client brief.
+
+The factory's own eval harness should be small and stable:
+
+| Eval | What it measures | Cadence |
+| --- | --- | --- |
+| Golden briefs (10) | End-to-end pass rate, rubric score, human minutes, rework | Quarterly |
+| Visual regression suite | Unintended UI change | Every PR |
+| Performance and a11y suite | Budgets and critical findings | Every PR |
+| Tool comparison | Same brief across models/skills/templates | Quarterly |
+| Cost report | Tokens, CI minutes, API spend per accepted site | Monthly |
+
+The rule: **external benchmarks tell you what the frontier can do; the internal eval tells you what your factory can ship.**
+
+### 7.8 Bottom line
+
+The independent scan validates the factory's core: DSH's orchestrator/worker split, one worktree per ticket, deterministic CI, preview URLs and human review are all at or near the frontier. It also exposes four gaps the factory should close:
+
+- **Spec before code.** Add the five-file spec pack; it is the cheapest quality intervention in the whole system.
+- **See the work.** Add the Playwright CLI skill and a maintained visual review platform; screenshots in a PR are necessary but not sufficient.
+- **Own the substrate.** Keep the factory registry and code ownership; use design workspaces and closed builders for exploration, not delivery.
+- **Measure the factory.** Golden briefs, visual diffs, accessibility and performance gates, and cost per accepted site are the metrics that matter.
+
+The frontier is not a smarter one-shot generator. It is a disciplined loop: **brief → spec → direction → compose → see → review → ship → learn.** The factory should be configured as that loop, with the smallest set of tools that makes each step true.
+
+---
+
 ## Appendices
 
 ### A. Brief intake schema
@@ -2137,6 +2448,38 @@ jobs:
 42. Impeccable releases: <https://github.com/pbakaus/impeccable/releases>
 43. Appie award-caliber-websites skill: <https://github.com/S3YED/appie-kit>
 44. Website Studio Harness: <https://github.com/sohamxi/website-studio-harness>
+45. Agent Skills standard: <https://agentskills.io>
+46. vercel-labs/skills — the `npx skills` CLI: <https://github.com/vercel-labs/skills>
+47. skills.sh — agent skills registry: <https://skills.sh>
+48. Superpowers: <https://github.com/obra/superpowers>
+49. Addy Osmani's agent skills: <https://github.com/addyosmani/agent-skills>
+50. Anthropic's skills repository: <https://github.com/anthropics/skills>
+51. Taste Skill: <https://github.com/Leonxlnx/taste-skill>
+52. GitHub Spec Kit: <https://github.com/github/spec-kit>
+53. OpenSpec: <https://openspec.dev/>
+54. Agent OS: <https://buildermethods.com/agent-os>
+55. BMAD Method: <https://github.com/bmad-code-org/BMAD-METHOD>
+56. Playwright CLI: <https://github.com/microsoft/playwright-cli>
+57. Playwright MCP: <https://github.com/microsoft/playwright-mcp>
+58. browser-use: <https://github.com/browser-use/browser-use>
+59. Midscene: <https://github.com/web-infra-dev/midscene>
+60. Argos visual testing: <https://argos-ci.com/>
+61. Lost Pixel: <https://github.com/lost-pixel/lost-pixel>
+62. Chromatic: <https://www.chromatic.com/>
+63. Percy: <https://percy.io/>
+64. Railway PR environments: <https://railway.com/guides/preview-deployments-with-pr-environments>
+65. Vercel preview deployments: <https://vercel.com/docs/deployments/preview-deployments>
+66. Netlify Deploy Previews: <https://docs.netlify.com/deploy/deploy-types/deploy-previews/>
+67. Preevy: <https://preevy.dev/>
+68. OpenDesign: <https://github.com/nexu-io/open-design>
+69. Onlook: <https://github.com/onlook-dev/onlook>
+70. Webstudio: <https://github.com/webstudio-is/webstudio>
+71. Plasmic: <https://github.com/plasmicapp/plasmic>
+72. Builder.io: <https://github.com/BuilderIO/builder>
+73. GrapesJS: <https://github.com/GrapesJS/grapesjs>
+74. WebArena: <https://github.com/web-arena-x/webarena>
+75. Design2Code: <https://github.com/NoviScl/Design2Code>
+76. WebDev Arena: <https://web.lmarena.ai/>
 
 ---
 
