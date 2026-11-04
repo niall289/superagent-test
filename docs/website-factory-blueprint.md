@@ -477,7 +477,7 @@ Why Astro fits editorial work:
 Recommended template shape:
 
 ```text
-templates/editorial-base/
+templates/editorial-base/     # shared base; editorial-serif/sans extend it
 ├── astro.config.mjs        # static output, sitemap, image service
 ├── src/
 │   ├── pages/              # file-based routes
@@ -1105,8 +1105,10 @@ website-factory/
 │   ├── prompts/                     # team prompt sections and overrides
 │   ├── skills/                      # one directory per skill
 │   ├── templates/
-│   │   ├── editorial-base/
-│   │   └── immersive-base/
+│   │   ├── editorial-serif/
+│   │   ├── editorial-sans/
+│   │   ├── immersive-webgl/
+│   │   └── immersive-video/
 │   ├── scripts/
 │   │   ├── doctor.mjs
 │   │   ├── new-site.mjs
