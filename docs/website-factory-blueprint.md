@@ -675,6 +675,8 @@ What top studios consistently do:
 6. **Detail density.** Focus states, selection colour, 404, loading, OG images, favicon, microcopy.
 7. **Restraint.** Fewer colours, fewer fonts, fewer effects, more whitespace.
 
+**A short watchlist.** Locomotive, Active Theory, Resn, Hello Monday, Build in Amsterdam and Studio Freight for studio practice; Codrops for technique; Awwwards and Godly for the current bar; Emil Kowalski, Josh Comeau and Refactoring UI for craft fundamentals. Study the work, not the surface effects.
+
 ### 3.2 Design-engineering standards
 
 The standards below synthesise the Awwwards criteria, Refactoring UI (Adam Wathan and Steve Schoger), Josh Comeau's writing on CSS and animation, Emil Kowalski's [animations.dev](https://animations.dev/) work on motion craft, and the Codrops case studies above. They are defaults; a brief may override them with a reason.
