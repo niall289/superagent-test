@@ -1706,7 +1706,7 @@ await browser.close()
 
 ### 6.4 Self-installation and integration matrix
 
-The factory supports three install sets: baseline (every site), lane-specific (editorial or immersive), and research (workers only). Vendored component source is a fourth, per-site source; nothing else is installed by default. Commands below show `@latest` for brevity; the factory pins every CLI in `factory/toolchain.lock.json` and CI runs the pinned version.
+The factory supports three install sets: baseline (every site), lane-specific (editorial or immersive), and research (workers only). Vendored component source is separate from these sets: it is a per-site selection from the factory registry. Nothing else is installed by default. Commands below show `@latest` for brevity; the factory pins every CLI in `factory/toolchain.lock.json` and CI runs the pinned version.
 
 | Tool or repo | Kind | Install command | Pin | Invoke during build | Verify | Licence |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -1761,7 +1761,7 @@ Doctor additions:
 | Impeccable installed and runnable | `npx impeccable detect --list-rules` | Print install command |
 | REA available when enabled | `rea --version` or configured `DSH_REA_CLI` | Disable REA for the ticket |
 | Firecrawl key present when research is enabled | `FIRECRAWL_API_KEY` exists; never print it | Research step blocked |
-| shadcn CLI version pinned | `pnpm exec shadcn --version` matches the pinned toolchain | Regenerate lock |
+| shadcn CLI version pinned | `pnpm dlx shadcn@<pinned> --version` matches the toolchain | Regenerate lock |
 | Vendored components have provenance | Every file under `packages/sections` has a source header | Block merge |
 | Licence notices current | `THIRD_PARTY_NOTICES.md` mentions every vendored package | Block merge |
 
