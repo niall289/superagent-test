@@ -5,13 +5,14 @@
 > **Scope:** research, architecture, and an actionable roadmap. This PR does not implement the factory.
 > **Audience:** the team operating the factory, the creative reviewers, and the agents that will run it.
 
-This document specifies an end-to-end **Autonomous Website Factory**: a system that takes a client brief, routes it through DeepSeek SuperAgent (`dsh-superagent`), builds the site in an isolated git worktree, verifies it with deterministic checks, and hands a human a reviewable pull request with a live preview and visual evidence. It covers the five areas requested in [issue #4](https://github.com/niall289/superagent-test/issues/4):
+This document specifies an end-to-end **Autonomous Website Factory**: a system that takes a client brief, routes it through DeepSeek SuperAgent (`dsh-superagent`), builds the site in an isolated git worktree, verifies it with deterministic checks, and hands a human a reviewable pull request with a live preview and visual evidence. It covers the five areas requested in [issue #4](https://github.com/niall289/superagent-test/issues/4), plus a dedicated research section on the skills, repositories and UI libraries the factory should incorporate, requested in review:
 
 1. [Factory operating model](#1-factory-operating-model)
 2. [Framework and template evaluation](#2-framework-and-template-evaluation)
 3. [Industry state of the art](#3-industry-state-of-the-art)
 4. [Skills and self-installation](#4-skills-and-self-installation)
 5. [Actionable roadmap](#5-actionable-roadmap)
+6. [Research: skills, repositories and UI libraries](#6-research-skills-repositories-and-ui-libraries)
 
 The recommendations are opinionated. Where two options are close, the document names a default, the trade-off, and the condition that should change it.
 
@@ -63,6 +64,12 @@ The recommendations are opinionated. Where two options are close, the document n
   - [5.6 Risk register](#56-risk-register)
   - [5.7 First tickets](#57-first-tickets)
   - [5.8 Open questions for review](#58-open-questions-for-review)
+- [6. Research: skills, repositories and UI libraries](#6-research-skills-repositories-and-ui-libraries)
+  - [6.0 Adoption tiers](#60-adoption-tiers)
+  - [6.1 Award and motion repositories](#61-award-and-motion-repositories)
+  - [6.2 Component and section libraries](#62-component-and-section-libraries)
+  - [6.3 Advanced agent skills and toolchains](#63-advanced-agent-skills-and-toolchains)
+  - [6.4 Self-installation and integration matrix](#64-self-installation-and-integration-matrix)
 - [Appendices](#appendices)
   - [A. Brief intake schema](#a-brief-intake-schema)
   - [B. Design QA checklist](#b-design-qa-checklist)
@@ -881,6 +888,18 @@ The factory must be able to rebuild its environment from a clean machine without
 | glTF-Transform | 4.5.1 | 3D asset compression | Lane B |
 | subfont / fonttools | 7.3.0 / pinned | Font subsetting | Yes |
 
+Research and component tooling (pinned with the repo; see [§6.4](#64-self-installation-and-integration-matrix)):
+
+| Tool | Version | Purpose | Required |
+| --- | --- | --- | --- |
+| Impeccable CLI | 4.8.0 | Design detector, critique and polish commands | Yes (dev) |
+| shadcn CLI | 4.23.0 | Registry and primitive installs | Yes |
+| skills CLI | 1.7.6 | Vendoring agent skills | Yes (dev) |
+| `@21st-dev/cli` | 1.18.0 | Component discovery | Optional |
+| rea-agents | 6.8.0 | Authorized reference analysis | Optional |
+| firecrawl | 4.51.0 | Reference discovery and content | Optional |
+| transitions.dev skill | vendored commit | Micro-interaction recipes | Yes |
+
 Verify a candidate version before pinning:
 
 ```sh
@@ -899,12 +918,15 @@ Skills are the factory's institutional memory. Each one is small, specific and l
 | `website-factory-art-direction` | Before code | Direction memo template, type pairing, palette rules, specificity test, anti-slop list | Memo exists and answers every prompt |
 | `website-factory-editorial` | Lane A | Astro conventions, content collections, section recipes, view transitions, image handling | Template smoke site builds |
 | `website-factory-immersive` | Lane B | R3F scene patterns, GLTF/KTX2 pipeline, video pipeline, fallbacks, device budgets | Lane B smoke scene runs at target fps |
-| `website-factory-motion` | Any motion work | GSAP/Lenis recipes, timing and easing tokens, scroll triggers, reduced-motion rules | Motion checklist; reduced-motion test |
+| `website-factory-motion` | Any motion work | GSAP/Lenis recipes, transitions.dev patterns, timing and easing tokens, scroll triggers, reduced-motion rules | Motion checklist; reduced-motion test |
 | `website-factory-content` | Copy and metadata | Voice rules, microcopy, SEO title/description, JSON-LD, licensing | Metadata lint; copy review |
+| `website-factory-reference-audit` | Research, before direction | Firecrawl/Playwright/REA protocol, target authorization, computed-style extraction, "borrow / avoid" notes | `reference-audit.md` complete; targets authorized |
+| `website-factory-component-registry` | Scaffold and adapt | Component selection, vendoring, provenance, licence checks, de-defaulting, registry entry | Registry entry, provenance header, tests |
+| `website-factory-impeccable` | Polish and verify | Impeccable commands, detector rules, ignore policy, CI wiring, live-mode safety | Detector clean or findings triaged |
 | `website-factory-qa` | Build and verify | Evidence matrix, Playwright config, axe rules, Lighthouse budgets, PR evidence format | CI green; evidence manifest complete |
 | `website-factory-deploy` | Preview and release | Cloudflare Pages setup, headers, redirects, env vars, smoke test, rollback | Preview and production workflows pass |
 | `website-factory-github` | All GitHub work | Factory labels, PR template, review-thread etiquette, bot rules | Review thread has the right disposition |
-| `website-factory-maintenance` | Upkeep tickets | Doctor, upgrade policy, template sync, worktree janitor | Weekly doctor job green |
+| `website-factory-maintenance` | Upkeep tickets | Doctor, upgrade policy, licence audit, template sync, worktree janitor | Weekly doctor job green |
 
 What is **not** a skill: framework API reference (retrieve from docs), client-specific facts (come from the brief), and anything already enforced by CI. Skills encode judgement and procedure; CI encodes facts.
 
@@ -1106,6 +1128,8 @@ website-factory/
 │   │   └── examples/
 │   ├── prompts/                     # team prompt sections and overrides
 │   ├── skills/                      # one directory per skill
+│   ├── registry/                    # curated shadcn-compatible component registry
+│   ├── reference-cache/             # cached Firecrawl/Playwright audits (gitignored)
 │   ├── templates/
 │   │   ├── editorial-serif/
 │   │   ├── editorial-sans/
@@ -1115,12 +1139,15 @@ website-factory/
 │   │   ├── doctor.mjs
 │   │   ├── new-site.mjs
 │   │   ├── evidence.mjs
+│   │   ├── reference-audit.mjs
+│   │   ├── add-component.mjs
 │   │   ├── template-diff.mjs
 │   │   └── cleanup-worktrees.sh
 │   └── toolchain.lock.json
 ├── packages/
 │   ├── tokens/                      # shared design tokens
 │   ├── motion/                      # shared GSAP/Lenis utilities
+│   ├── sections/                    # vendored, restyled registry components
 │   └── qa/                          # Playwright, axe, Lighthouse presets
 ├── sites/
 │   └── <client-slug>/
@@ -1211,7 +1238,7 @@ Template variants to ship first:
 
 | Workflow | Trigger | Does | Required |
 | --- | --- | --- | --- |
-| `verify` | PR touching `sites/`, `packages/`, `factory/` | Install, doctor, lint, typecheck, test, build, axe, visual, Lighthouse, link check, size check | Yes |
+| `verify` | PR touching `sites/`, `packages/`, `factory/` | Install, doctor, lint, typecheck, test, build, design detector, axe, visual, Lighthouse, link check, size check | Yes |
 | `preview` | PR opened/synchronised | Deploy changed sites to Cloudflare Pages; comment URL + commit SHA | Yes for site PRs |
 | `production` | Push to `main` | Build, deploy, smoke test, post-deploy Lighthouse | Yes |
 | `factory-doctor` | Weekly + changes under `factory/` | Doctor, template smoke, dependency audit | No (alerts) |
@@ -1289,6 +1316,8 @@ module.exports = {
 | `prepare` | Worktree + `pnpm install` + `doctor --ci` | Isolation and reproducibility |
 | `maxWorkers` | 2 initially (one per lane), 4 at steady state | Match review capacity, not model capacity |
 | Blocked commands | Destructive filesystem commands; `git push --force` to `main` | Keep irreversible actions human; production is gated by the human merge |
+| Research tools | Firecrawl, Playwright, REA; authorized targets only | Deterministic reference audit; legal and ethical guardrails |
+| Component sources | Factory registry; shadcn CLI pinned; no arbitrary registry pulls | Review once, reuse; avoid internet code in client sites |
 | Worker tools | Files, search, shell/jobs, web, skills, todo, subagent | Enough to build and verify; no direct messaging |
 | Delivery requirements | Before/after evidence; human merge; no auto-merge | Design approval is a human decision |
 | Prompt additions | Lane, template, rubric, evidence, merge policy | Encode factory rules once, not per ticket |
@@ -1312,6 +1341,8 @@ Deliverables:
 - shared tokens package and one editorial template skeleton;
 - `verify` and `preview` workflows;
 - evidence script and PR template;
+- reference-audit script and authorization protocol;
+- curated component registry skeleton with provenance rules;
 - one internal pilot brief (not a client) to exercise the loop end to end.
 
 Exit criteria: a pilot PR with a preview URL, before/after evidence, green checks and a human review in under one day.
@@ -1322,6 +1353,8 @@ Deliverables:
 
 - `editorial-serif` and `editorial-sans` variants with six section types;
 - motion and content skills;
+- component registry v1 with approved, restyled sections;
+- Impeccable polish gate and detector thresholds in CI;
 - rubric calibration with the creative director on three sites;
 - token/turn/CI metrics dashboard;
 - template versioning and drift check.
@@ -1336,7 +1369,8 @@ Deliverables:
 - R3F scene kit, GLTF/KTX2 pipeline, video pipeline;
 - device fallback and reduced-motion paths;
 - real-device test protocol;
-- performance budgets validated on mid-tier hardware.
+- performance budgets validated on mid-tier hardware;
+- REA/Firecrawl research runbook for immersive references.
 
 Exit criteria: two immersive pilots; stable 60 fps on the target device matrix or a graceful fallback; no critical a11y findings; preview ≤ 4 hours.
 
@@ -1347,6 +1381,7 @@ Deliverables:
 - per-client isolation decision and, if needed, repo split;
 - cost model (tokens, CI minutes, hosting) per site;
 - template upgrade cadence and janitor automation;
+- quarterly review of skills, component sources and licences;
 - SLO review and prompt/skill tightening;
 - operator runbooks and incident playbook.
 
@@ -1365,6 +1400,8 @@ Exit criteria: ten sites delivered; review time flat as volume grows; rework ≤
 | Secret or client asset leak | Low | Critical | Least privilege, no secrets in repo/logs, preview protection, licence checks | Operator |
 | Supply-chain compromise | Low | High | Lockfile, audit, cooldown, allowlist | Factory maintainer |
 | Prompt injection via brief/content | Medium | Medium | Treat content as data, skills as the only instructions | Operator |
+| Vendored component imports a look or a licence problem | High | Medium | Registry review, provenance headers, de-default checklist, licence audit | Design QA |
+| Reference scraping or REA exceeds authorization | Low | High | Authorization log, robots/ToS checks, no asset copying, human approval | Operator |
 | Worktree/disk leak | Medium | Low | Weekly janitor, prune merged worktrees | Factory maintainer |
 | Agent loops on a hard visual problem | Medium | Medium | Budget guard, three-approach rule, blocked report | Worker |
 
@@ -1381,10 +1418,13 @@ In order, each a small PR:
 7. **CI verify + preview** — workflows, Cloudflare Pages project, PR comment.
 8. **Brief intake** — issue form, schema, assessment prompt and skill.
 9. **Skills v1** — brief, art direction, editorial, motion, QA.
-10. **Pilot site** — internal brief, full loop, rubric calibration.
-11. **Immersive template** — R3F scene kit, fallback, video.
-12. **Production release** — production workflow, smoke, rollback runbook.
-13. **Maintenance** — weekly doctor, janitor, upgrade policy.
+10. **Reference-audit harness** — Firecrawl/Playwright/REA protocol, authorization log, audit template.
+11. **Curated component registry** — registry.json, provenance policy, first approved sections.
+12. **Polish gate** — Impeccable install, detector thresholds, CI artifact and ignore policy.
+13. **Pilot site** — internal brief, full loop, rubric calibration.
+14. **Immersive template** — R3F scene kit, fallback, video.
+15. **Production release** — production workflow, smoke, rollback runbook.
+16. **Maintenance** — weekly doctor, janitor, licence audit, upgrade policy.
 
 Each ticket follows the same operating model it is building: worktree, branch, PR, evidence, human review.
 
@@ -1400,6 +1440,351 @@ These are deliberately left open; they need a decision from the team, not from a
 6. **Framework breadth:** support SvelteKit as a third lane, or keep two lanes until demand is proven?
 7. **Analytics and consent:** one default provider, or per-client choice with a shared consent wrapper?
 8. **Budget:** what token and CI-minute ceiling per site makes the factory economically better than a traditional build?
+
+---
+
+## 6. Research: skills, repositories and UI libraries
+
+The factory should not reinvent primitives, and it should not absorb every new registry. The rule is **a curated supply chain, not an open firehose**. This section evaluates the repositories, component sources and agent skills worth adopting, and defines how a worker installs and invokes them without turning the site into a collage of other people's defaults.
+
+### 6.0 Adoption tiers
+
+Every external artifact enters the factory at exactly one tier.
+
+| Tier | Meaning | Examples | Handling |
+| --- | --- | --- | --- |
+| **Dependency** | A pinned npm package, installed by the package manager | Lenis, GSAP, Three.js, React Three Fiber, Motion, `@relume_io/relume-ui` | Add to the site's `package.json`, commit the lockfile, upgrade through one factory ticket |
+| **Vendored** | Source copied into the repository and then owned by the factory | shadcn/ui, Aceternity, Magic UI, 21st.dev components, Relume sections | Provenance header, review, token adaptation, tests, `THIRD_PARTY_NOTICES.md` |
+| **Reference** | Studied, never shipped wholesale | Awwwards, Godly, Codrops, animations.dev, an authorized reference's DOM captured by REA | Time-boxed research; record what was learned; never copy assets or code |
+
+Two failure modes this prevents:
+
+- **Reinventing primitives** — spending tokens and days on a dialog, a form, a marquee or a scroll utility that already exists.
+- **Importing a look** — adopting a registry's default gradient, radius, motion and copy until every client site resembles the same demo.
+
+### 6.1 Award and motion repositories
+
+The motion stack is small on purpose. A few well-chosen libraries cover nearly every award-tier interaction; the craft is in choreography, performance and restraint, not in the number of dependencies.
+
+| Project | What it gives | Licence | Install | Factory use |
+| --- | --- | --- | --- | --- |
+| [Lenis](https://github.com/darkroomengineering/lenis) (Darkroom Engineering) | Inertial smooth scroll with a small API and a single RAF loop | MIT | `pnpm add lenis` | Motion layer in both lanes; paired with GSAP's ticker |
+| [GSAP + ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) | Timelines, scroll orchestration, SplitText, Flip, Observer | Free [standard "no charge" licence](https://gsap.com/standard-license), source-available, not OSI open source | `pnpm add gsap` | The narrative motion owner: scroll sequences, reveals, page transitions |
+| [Three.js](https://threejs.org/) | WebGL engine | MIT | `pnpm add three` | Lane B scenes |
+| [React Three Fiber](https://r3f.docs.pmnd.rs/) + [drei](https://github.com/pmndrs/drei) | Declarative Three.js renderer and helpers | MIT | `pnpm add @react-three/fiber @react-three/drei` | Lane B scene graph, controls, loaders, post-processing helpers |
+| [Motion](https://motion.dev/) | React animation and gesture primitives (formerly Framer Motion) | MIT | `pnpm add motion` | Only where registry components already depend on it; not a second scroll system |
+| [transitions.dev](https://transitions.dev/) (Jakub Antalík) | 43+ crafted UI transitions on the site, 12 drop-in CSS transitions in the skill | Free for commercial use; no redistribution as a competing library; tooling MIT | `npx skills add Jakubantalik/transitions.dev` | Micro-interactions: dropdowns, modals, badges, text swaps, page slides |
+| [animations.dev](https://animations.dev/) (Emil Kowalski) | Judgement for how motion should feel: springs, easing, perceived speed | Course terms; not a code source | — | Reference for motion critique and timing decisions |
+| [Codrops](https://tympanus.net/codrops/) | Technical breakdowns of award-tier sites | Article/code licences vary | — | Architecture and technique research; never copy a demo wholesale |
+| Awwwards, FWA, [Godly](https://godly.website/) | Curation and the current bar | Reference only | — | Calibration and watchlist |
+
+**One motion owner per lane.** Stacking GSAP, Motion, Lenis and R3F without a plan produces competing tickers, doubled scroll effects and jank.
+
+| Lane | Timeline owner | Scroll | Micro-interactions | Rule |
+| --- | --- | --- | --- | --- |
+| Editorial | GSAP | Lenis + ScrollTrigger | transitions.dev CSS, or GSAP for stateful cases | No Motion unless a React island needs it |
+| Immersive | GSAP for DOM/timeline, `useFrame` for scene | Lenis + ScrollTrigger | transitions.dev CSS for DOM UI | One clock; do not start a second RAF inside R3F |
+
+Baseline install:
+
+```sh
+# Editorial lane
+pnpm add gsap lenis
+npx skills add Jakubantalik/transitions.dev
+
+# Immersive lane
+pnpm add three @react-three/fiber @react-three/drei gsap lenis
+pnpm add motion          # only if the chosen registry components use Motion
+```
+
+Rules:
+
+- One ticker. Lenis is driven by `gsap.ticker`; R3F reads the same clock or its own `useFrame`; never both for the same motion.
+- CSS-first for micro-interactions; JavaScript timelines for choreography. A dropdown does not need a timeline.
+- Every motion has a `prefers-reduced-motion` path and a static fallback.
+- Motion never replaces content or hides a slow page.
+- Measure on a mid-tier Android before calling an interaction done.
+
+What to study in award work: the pacing of a scroll sequence, the restraint in a hover state, the typographic change on scroll, the confidence to leave space. The watchlist in [§3.1](#31-what-juries-and-studios-reward) is the reference set; the libraries above are the tools.
+
+### 6.2 Component and section libraries
+
+Component libraries solve two different problems: **primitives** (accessible dialogs, forms, menus, tables) and **sections** (heroes, bento grids, marquees, galleries). The factory adopts primitives as dependencies or vendored code, and treats sections as raw material that must be restyled to the brief.
+
+| Library | Model | Licence and cost | Best for | Install | Main risk |
+| --- | --- | --- | --- | --- | --- |
+| [shadcn/ui](https://ui.shadcn.com/) | Copy-paste React + Tailwind + Radix | MIT | App primitives: dialog, form, table, command, navigation | `pnpm dlx shadcn@latest init`; `pnpm dlx shadcn@latest add button` | Default look is recognisably shadcn; app-shaped, not editorial |
+| [Aceternity UI](https://ui.aceternity.com/) | Copy-paste React + Tailwind + Motion | Free for unlimited personal/commercial use; no redistribution as a competing library; paid premium tier | Hero effects, bento grids, backgrounds, 3D pins | `npx shadcn@latest add @aceternity/<component>`; `pnpm add motion`; 3D peers | Instantly recognisable "AI demo" aesthetic; heavy effects |
+| [Magic UI](https://magicui.design/) | Copy-paste React + Tailwind + Motion | MIT | Marquees, animated lists, globes, bento, text effects | `pnpm dlx shadcn@latest add @magicui/<component>` | Same recognisable aesthetic; motion-heavy |
+| [21st.dev](https://21st.dev/) | Community registry of React/Tailwind components, templates and themes | Per component; licences vary; CLI MIT | Discovery and inspiration; occasional section | `npx @21st-dev/cli@latest init --client <client>`; `npx skills add 21st-dev/skill` | Quality and licence vary by author; no curation |
+| [Relume Library for React](https://react-docs.relume.io/) | Commercial library; copy-paste sections, UI based on shadcn | Relume subscription; verify package terms | Sitemap and wireframe structure; 1000+ typed section components | `pnpm add @relume_io/relume-ui @relume_io/relume-tailwind`; copy sections from the library | Site Builder React export gives **unstyled wireframes only**; structure is generic until restyled |
+| **Factory registry** | Internal, curated, versioned | Internal | Approved sections and effects, already adapted to tokens | `pnpm factory:component add @factory/<name>` | Maintenance; must not become a stale fork |
+
+#### The factory registry is the integration point
+
+Workers should not pull arbitrary code from the internet into a client site. They pull from the factory's own shadcn-compatible registry.
+
+```text
+factory/registry/
+├── registry.json              # registry index; names, files, dependencies
+├── sections/
+│   ├── hero-split/
+│   ├── work-index/
+│   └── cta-band/
+└── effects/
+    ├── scroll-reveal/
+    └── text-swap/
+```
+
+- The registry is a normal shadcn registry (`registry.json`, namespaces, authentication), so `shadcn` tooling and the private registry workflow apply ([shadcn registry docs](https://ui.shadcn.com/docs/registry)).
+- A new component follows: propose → vendor → strip the default look → apply tokens → add reduced-motion and keyboard behaviour → pass axe, visual and size checks → register.
+- Workers use `pnpm factory:component add @factory/hero-split`, which copies source into the site, writes a provenance header and updates `THIRD_PARTY_NOTICES.md`.
+- The site records which registry items it used in `factory.config.json`; updates flow through a template-sync ticket, not a silent overwrite.
+
+#### Adoption rules
+
+1. **Structure from libraries, identity from the brief.** A Relume wireframe or a 21st hero is a starting arrangement, never a finished design.
+2. **One visual library per site.** shadcn primitives are always allowed; choose at most one of Aceternity, Magic, 21st or Relume for sections.
+3. **Depend for primitives, vendor for sections.** Packages are easier to patch; section source must be owned and edited.
+4. **Provenance or it did not happen.** Every vendored file carries source URL, licence, date and the local changes.
+5. **De-default before review.** Replace colours, radii, shadows, type and easing with factory tokens; remove glass, gradients, glow and emoji unless the brief asks for them.
+6. **Count the cost.** Every dependency and every vendored effect is measured in the bundle-size and performance checks.
+7. **Accessibility is not inherited.** Registry code often ships without focus management, keyboard behaviour or reduced-motion handling.
+8. **No paid content without a licence.** Do not copy Aceternity Pro blocks, Relume paid sections or 21st paid components without the client's licence.
+9. **No scraped assets.** Reference imagery, fonts and video are licensed or replaced, never lifted.
+10. **Delete what is unused.** A vendored component that is not on the page is dead weight.
+
+#### Selection rubric
+
+Score each candidate 1–5; adopt at 20+/30 and never adopt a candidate with a licence or accessibility blocker.
+
+| Criterion | Weight | Question |
+| --- | --- | --- |
+| Design fit | 5 | Does it serve this brief's direction, or does it impose its own? |
+| Dependency weight | 5 | How much JS, CSS and peer dependency does it add? |
+| Accessibility | 5 | Keyboard, focus, semantics, reduced motion, contrast |
+| Licence and cost | 5 | Can the client legally ship it, and is the cost approved? |
+| Maintenance | 5 | Is the source stable, or will it rot in six months? |
+| Slop risk | 5 | Would a reviewer recognise this from a thousand other AI sites? |
+
+#### Relume workflow
+
+Relume is strongest before code: sitemap, wireframe and section structure. Use it to get from a brief to an agreed page skeleton, export the React wireframe, then rebuild the surface with the factory's tokens, type and imagery. Do not ship the wireframe's default spacing or component styling, and do not expect the Relume Style Guide to export with React; that export is not supported.
+
+### 6.3 Advanced agent skills and toolchains
+
+Skills and agent tools are **instructions plus capabilities**. A malicious or careless skill can read files, call the network or push code. Treat every third-party skill as source code: review it, pin it, vendor it, and register it through the DSH prompt configuration rather than letting it fetch itself at runtime.
+
+| Skill or tool | What it gives | Licence | Install | Factory use |
+| --- | --- | --- | --- | --- |
+| [Impeccable](https://impeccable.style/) (`pbakaus/impeccable`) | Design vocabulary and commands (`polish`, `bolder`, `critique`, `audit`) plus a 62-rule deterministic slop/quality detector | Apache-2.0 | `npx impeccable install`; `npx impeccable detect` | Pre-PR polish and audit; CI gate; design-system documentation |
+| [transitions.dev skill](https://transitions.dev/) | 12 drop-in CSS transitions with documented hooks | Free commercial use; no redistribution | `npx skills add Jakubantalik/transitions.dev` | Micro-interaction recipes |
+| [REA](https://rea.tools/) (`morluto/rea`) | MCP/CLI for reverse-engineering binaries, apps, JavaScript/Electron and websites; evidence-based analysis | MIT | `pnpm add -D rea-agents`; `pnpm exec rea-agents setup .` | Authorized reference analysis: DOM, runtime behaviour, animation architecture |
+| [DSH REA adapter](https://github.com/zhaofeng130/dsh-rea) | Registers the `reverse-engineer-anything` skill plus `rea` and `rea_doctor` tools in DSH sessions | Community adapter; assess licence and maintenance | `dsh plugin --profile <profile> add github:zhaofeng130/dsh-rea` | Optional DSH integration; not required for REA itself |
+| [Firecrawl](https://firecrawl.dev/) | Scrape, crawl, map, search and interact with pages; Markdown, HTML, screenshots, structured JSON | AGPL-3.0 for self-hosting; hosted service terms | `pnpm add -D firecrawl`; `FIRECRAWL_API_KEY` | Reference discovery, content inventory, sitemaps, screenshots |
+| [Playwright](https://playwright.dev/) | Browser automation, screenshots, DOM and computed styles | Apache-2.0 | Already in the toolchain | Deterministic reference audit; visual evidence; a11y |
+| [21st.dev skill](https://21st.dev/) | Search, install and publish registry components from the terminal | CLI MIT; component licences vary | `npx skills add 21st-dev/skill` | Component discovery; vendor through the factory registry |
+
+#### Impeccable: the taste gate
+
+Impeccable is the closest thing to an automated design reviewer that is useful rather than noisy. It installs a skill and a deterministic detector, works with DeepSeek Harness, and writes project context that later commands read.
+
+Factory usage:
+
+1. `npx impeccable install` in the workspace; commit the generated config, not the tool's cache.
+2. Once per site, `/impeccable init` writes `PRODUCT.md`; `/impeccable document` writes `DESIGN.md` from the existing visual system.
+3. Before review, run `/impeccable critique` and `/impeccable audit`; fix P0/P1 findings first.
+4. In CI, run `npx impeccable detect src/` and `npx impeccable detect <preview-url>`; fail on exit code 2; publish `--json` results as an artifact.
+5. Allow the brand font explicitly (`npx impeccable ignores add-value overused-font ... --reason "Brand font"`) instead of disabling the rule.
+6. Do not run `bolder` or `overdrive` without the brief; those commands amplify, and amplification of a weak direction is still slop.
+
+Security and cost note: Impeccable's live mode can spawn an external coding CLI with approvals or sandboxing disabled. The factory disables live-apply (`IMPECCABLE_LIVE_COPY_AGENT=off`), runs it only in a local checkout, and never exposes it to a deployed site or a production CSP.
+
+#### REA: understand references, do not clone them
+
+REA is useful when a reference's behaviour is not visible in the markup: how a scroll sequence is driven, how a canvas scene is composed, how a page transition is implemented, what a JavaScript bundle does at runtime. It produces evidence and limitations, not a copy of the code.
+
+Factory rules:
+
+- Only analyse targets the client owns, public references explicitly cleared for research, or the factory's own sites.
+- Respect terms of service, robots and copyright. Do not bypass authentication, paywalls or technical protection measures.
+- Record the target URL, date, scope and authorization in `reference-audit.md`.
+- Extract principles and measurements (timings, easing, structure, technique), not proprietary code, assets, fonts or copy.
+- Do not use REA to reproduce a competitor's product or to lift licensed components.
+- Keep native-binary analysis out of the website factory unless a ticket explicitly needs it; the website-relevant scope is DOM, CSS, JS and runtime behaviour.
+
+Install for DSH:
+
+```sh
+# REA itself (project-local preferred)
+pnpm add -D rea-agents
+pnpm exec rea-agents setup .
+
+# Optional DSH adapter; review the plugin before enabling
+dsh plugin --profile <profile> add github:zhaofeng130/dsh-rea
+```
+
+The adapter registers `reverse-engineer-anything`, `rea` and `rea_doctor`. It does not bundle REA; configure `DSH_REA_CLI` or keep `rea` on `PATH`.
+
+#### Firecrawl: discovery and content, not computed style
+
+Firecrawl is a good fit for the first pass of reference research: map a site, scrape its pages to Markdown/HTML, capture screenshots, and extract structured content. It is **not** a computed-style engine: to know the rendered font size, line height, colour, spacing or animation timing, use Playwright against the live page.
+
+```ts
+import { Firecrawl } from 'firecrawl'
+
+const app = new Firecrawl({ apiKey: process.env.FIRECRAWL_API_KEY })
+const page = await app.scrape('https://reference.example/', { formats: ['markdown', 'html'] })
+```
+
+Licence note: Firecrawl is AGPL-3.0. Self-hosting it inside a proprietary product can trigger source-disclosure obligations. The factory uses the hosted API, or isolates a self-hosted instance as a separate service, and keeps the reasoning in `decisions.md`.
+
+Usage rules:
+
+- Cache results under `factory/reference-cache/<hash>/` and reuse them; do not re-scrape on every turn.
+- Respect robots, terms and rate limits; no authenticated or private content.
+- Store only what the audit needs; remove PII and client-confidential material.
+- Record the URL, date and licence status alongside every captured asset.
+- Pair every scrape with Playwright measurements and a human-written "borrow / avoid" note.
+
+#### The reference audit pipeline
+
+```text
+authorized URL
+   │
+   ├── Firecrawl map + scrape + screenshots ──► content, routes, imagery, copy
+   ├── Playwright evaluate ──────────────────► computed type, colour, spacing, motion
+   ├── REA (optional) ───────────────────────► runtime behaviour, JS architecture
+   └── human/creative director ──────────────► what is worth borrowing
+   ▼
+.factory/reference-audit.md  +  .factory/tokens.reference.json
+   ▼
+art-direction memo  →  build
+```
+
+A compact Playwright audit:
+
+```ts
+import { chromium } from 'playwright'
+
+const browser = await chromium.launch()
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+await page.goto(url, { waitUntil: 'networkidle' })
+
+const audit = await page.evaluate(() => {
+  const styleOf = (el: Element) => {
+    const s = getComputedStyle(el)
+    return {
+      fontFamily: s.fontFamily,
+      fontSize: s.fontSize,
+      lineHeight: s.lineHeight,
+      letterSpacing: s.letterSpacing,
+      color: s.color,
+      background: s.backgroundColor,
+    }
+  }
+  return {
+    title: document.title,
+    fonts: [...document.fonts].map((f) => `${f.family} ${f.weight}`),
+    headings: [...document.querySelectorAll('h1, h2, h3')].slice(0, 12).map((el) => ({
+      text: el.textContent?.trim(),
+      ...styleOf(el),
+    })),
+    body: styleOf(document.body),
+    animations: document.getAnimations().map((a) => ({
+      name: 'animationName' in a ? (a as CSSAnimation).animationName : a.constructor.name,
+      duration: a.effect?.getTiming().duration,
+      easing: a.effect?.getTiming().easing,
+    })),
+  }
+})
+
+await browser.close()
+```
+
+`document.getAnimations()` covers CSS and Web Animations API effects; GSAP and other JavaScript-driven timelines do not appear there, so inspect those with REA or by reading the bundle. The audit ends in a one-page direction memo, not a clone. If the output reads like the reference with the logo swapped, the worker has failed the specificity test.
+
+### 6.4 Self-installation and integration matrix
+
+The factory supports three install sets: baseline (every site), lane-specific (editorial or immersive), and research (workers only). Vendored component source is a fourth, per-site source; nothing else is installed by default. Commands below show `@latest` for brevity; the factory pins every CLI in `factory/toolchain.lock.json` and CI runs the pinned version.
+
+| Tool or repo | Kind | Install command | Pin | Invoke during build | Verify | Licence |
+| --- | --- | --- | --- | --- | --- | --- |
+| Lenis | Dependency | `pnpm add lenis` | lockfile | Motion layer, one ticker | Reduced-motion + scroll test | MIT |
+| GSAP | Dependency | `pnpm add gsap` | lockfile | Timelines, ScrollTrigger | Visual + perf | Standard no-charge |
+| Three.js | Dependency | `pnpm add three` | lockfile | Lane B scene | WebGL fallback + fps | MIT |
+| React Three Fiber + drei | Dependency | `pnpm add @react-three/fiber @react-three/drei` | lockfile | Lane B scene graph | Scene smoke test | MIT |
+| Motion | Dependency | `pnpm add motion` | lockfile | Registry components that need it | Bundle budget | MIT |
+| transitions.dev | Skill | `npx skills add Jakubantalik/transitions.dev` | vendor commit | Micro-interactions | Reduced-motion + visual | Free commercial, no redistribution |
+| shadcn/ui CLI | Tool | `pnpm dlx shadcn@latest init` | `shadcn` version | Primitives and registry installs | Component axe test | MIT |
+| Aceternity UI | Vendored | `npx shadcn@latest add @aceternity/<name>` | commit | Selected marketing effects | Perf + a11y + de-default review | Free commercial, no redistribution |
+| Magic UI | Vendored | `pnpm dlx shadcn@latest add @magicui/<name>` | commit | Selected marketing sections | Perf + a11y + de-default review | MIT |
+| 21st.dev | Registry | `npx @21st-dev/cli@latest init --client <client>`; `npx skills add 21st-dev/skill` | CLI lockfile | Discovery, then vendor | Per-component licence review | Varies |
+| Relume Library | Commercial | `pnpm add @relume_io/relume-ui @relume_io/relume-tailwind` | lockfile | Wireframe and section structure | Restyle + a11y review | Relume terms |
+| Impeccable | Tool + skill | `npx impeccable install` | vendor config | `critique`, `audit`, `polish`; `detect` in CI | Exit code + JSON artifact | Apache-2.0 |
+| REA | Tool + skill | `pnpm add -D rea-agents`; `pnpm exec rea-agents setup .` | lockfile | Authorized reference analysis | `rea_doctor` evidence | MIT |
+| DSH REA adapter | Plugin | `dsh plugin --profile <profile> add github:zhaofeng130/dsh-rea` | commit/tag | DSH `rea`/`rea_doctor` tools | Tool smoke test | Community; assess |
+| Firecrawl | Dependency + API | `pnpm add -D firecrawl` | lockfile | Reference discovery and content | Cached audit artifact | AGPL-3.0 / hosted terms |
+| Playwright | Tool | already installed | lockfile | Computed-style audit, evidence, a11y | Audit artifact | Apache-2.0 |
+
+#### Build-loop integration
+
+| Stage | Tool | Command or action | Artifact |
+| --- | --- | --- | --- |
+| Research | Firecrawl, Playwright, REA | `pnpm factory:research <url>` | `reference-audit.md`, `tokens.reference.json` |
+| Direction | Impeccable, creative director | `/impeccable init`; direction memo | `PRODUCT.md`, `DESIGN.md`, `decisions.md` |
+| Scaffold | shadcn CLI, factory registry | `pnpm factory:component add @factory/<name>` | Vendored source with provenance |
+| Build | transitions.dev, GSAP/Lenis | `/skill transitions-dev`; motion layer | Components and motion |
+| Polish | Impeccable | `/impeccable critique`; `/impeccable audit`; `npx impeccable detect src/` | Findings, fixes |
+| Verify | Impeccable, axe, Lighthouse, Playwright | `pnpm factory:audit` | CI result + evidence |
+| Review | PR template | Evidence table, preview URL, limitations | Human decision |
+| Maintain | Doctor, licence audit | `pnpm factory:doctor`; monthly dependency review | Upkeep ticket |
+
+`package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "factory:research": "node factory/scripts/reference-audit.mjs",
+    "factory:component": "node factory/scripts/add-component.mjs",
+    "factory:polish": "npx impeccable detect src/",
+    "factory:doctor": "node factory/scripts/doctor.mjs",
+    "factory:audit": "pnpm factory:polish && pnpm test:a11y && pnpm test:size"
+  }
+}
+```
+
+Doctor additions:
+
+| Check | Command or condition | Failure |
+| --- | --- | --- |
+| Impeccable installed and runnable | `npx impeccable detect --list-rules` | Print install command |
+| REA available when enabled | `rea --version` or configured `DSH_REA_CLI` | Disable REA for the ticket |
+| Firecrawl key present when research is enabled | `FIRECRAWL_API_KEY` exists; never print it | Research step blocked |
+| shadcn CLI version pinned | `pnpm exec shadcn --version` matches the pinned toolchain | Regenerate lock |
+| Vendored components have provenance | Every file under `packages/sections` has a source header | Block merge |
+| Licence notices current | `THIRD_PARTY_NOTICES.md` mentions every vendored package | Block merge |
+
+#### Security and cost controls
+
+- **Pin every install.** Use `pnpm add` with the lockfile; avoid unpinned `npx` in the build loop. When a registry requires `npx`, pin the package version and review the fetched source.
+- **Review before install.** A component or skill is code; read it, check the licence, check the maintainer, and record the decision.
+- **Network allowlist.** Limit worker egress to npm, the skills registry, Firecrawl, 21st.dev, Impeccable and the client's own domains; log outbound calls.
+- **Secrets in env only.** Firecrawl, 21st and hosting keys live in the environment, never in prompts, briefs, screenshots or commits.
+- **No private content.** Do not scrape authenticated pages, private Feishu content or client-confidential material; do not send it to third-party APIs.
+- **Cost controls.** Cache scrapes by URL hash; cap Firecrawl crawls per ticket; use the smallest model that passes; count token and API spend per accepted site.
+- **Licence hygiene.** Keep licence texts, record the source and date, and re-check when a component is updated.
+- **Remove unused code.** Vendored components that are not rendered are deleted before review.
+
+#### Recommended install sets
+
+| Set | Packages and skills | When |
+| --- | --- | --- |
+| Baseline | `gsap`, `lenis`, Impeccable, transitions.dev skill | Every site |
+| Editorial extras | `shadcn/ui` primitives; `@relume_io/relume-ui` only if the Relume workflow is chosen | Editorial lane |
+| Immersive extras | `three`, `@react-three/fiber`, `@react-three/drei`, `motion` (if needed) | Immersive lane |
+| Research | `playwright` (already present), `firecrawl`, `rea-agents` | Reference-audit tickets |
+| Component sources | Aceternity, Magic UI, 21st, Relume | Vendored per site; never all at once |
 
 ---
 
@@ -1633,6 +2018,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: npx impeccable detect src/
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:a11y
       - run: pnpm test:visual
@@ -1672,6 +2058,21 @@ jobs:
 19. axe-core: <https://github.com/dequelabs/axe-core>
 20. Astro documentation: <https://docs.astro.build/>
 21. React Three Fiber documentation: <https://r3f.docs.pmnd.rs/>
+22. transitions.dev — UI transitions and agent skill: <https://transitions.dev/>
+23. shadcn/ui — code registry: <https://ui.shadcn.com/docs/registry>
+24. Aceternity UI: <https://ui.aceternity.com/>
+25. Aceternity UI licence: <https://ui.aceternity.com/licence>
+26. Magic UI: <https://magicui.design/>
+27. 21st.dev — component registry: <https://21st.dev/>
+28. Relume Library for React: <https://react-docs.relume.io/>
+29. Impeccable — design vocabulary and detector: <https://impeccable.style/>
+30. REA — Reverse Engineer Anything: <https://rea.tools/>
+31. dsh-rea — DeepSeek Harness adapter: <https://github.com/zhaofeng130/dsh-rea>
+32. Firecrawl: <https://firecrawl.dev/>
+33. Firecrawl repository (AGPL-3.0): <https://github.com/firecrawl/firecrawl>
+34. Playwright — evaluating JavaScript in the page: <https://playwright.dev/docs/evaluating>
+35. GSAP standard licence: <https://gsap.com/standard-license>
+36. Motion: <https://motion.dev/>
 
 ---
 
