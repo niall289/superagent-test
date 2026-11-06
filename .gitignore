@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Ephemeral ticket artifacts (see AGENTS.md)
+.factory/
+
+# Build output
+dist/
+.astro/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+
+# Test and evidence artifacts
+playwright-report/
+test-results/
+coverage/
+.lighthouseci/
+
+# Reference audits are cached locally, never committed
+factory/reference-cache/
+
+# Environment and local state
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log

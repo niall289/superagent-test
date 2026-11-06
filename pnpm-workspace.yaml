@@ -1,0 +1,11 @@
+# Workspace projects: shared packages and factory tooling only. `factory/*`
+# covers factory tooling packages; templates are nested deeper
+# (factory/templates/<template>) and are copied into sites/<slug>.
+#
+# Client sites are deliberately NOT workspace members. Each site under
+# sites/<slug> is a standalone shippable project with its own package.json and
+# lockfile, so one client's dependency graph cannot affect another's or the
+# factory's build graph.
+packages:
+  - 'packages/*'
+  - 'factory/*'
