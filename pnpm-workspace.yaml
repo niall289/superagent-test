@@ -1,0 +1,7 @@
+# Workspace projects. `factory/*` covers factory tooling packages; templates are
+# nested deeper (factory/templates/<template>) and are copied into sites/<slug>
+# rather than installed as workspace projects.
+packages:
+  - 'packages/*'
+  - 'factory/*'
+  - 'sites/*'
