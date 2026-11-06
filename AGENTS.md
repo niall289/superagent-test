@@ -121,6 +121,19 @@ The worker writes the **five-file spec pack** on its first turn:
 | `.factory/tasks.md` | Atomic, ordered, testable tasks; names the registry items and new sections before component code is written |
 | `.factory/acceptance.md` | Given/When/Then scenarios, budgets and the evidence matrix |
 
+The machine-readable versions of these five files live in
+`factory/specs/*.template.md`. Copy them into `.factory/` and fill the YAML
+frontmatter:
+
+- `spec` — `id`, `client`, `vertical`, `audience`, `core_requirements`;
+- `design` — `tokens`, `archetype`, `palette`, `type_scale`, `motion_tokens`;
+- `plan` — template source, selected registry items, risks and budget;
+- `tasks` — atomic, ordered tasks with stable `T-01` IDs;
+- `acceptance` — criteria mapped to named CI, axe and Lighthouse check IDs.
+
+Keep the frontmatter valid YAML and the IDs stable across revisions; evidence,
+tasks and QA key off them.
+
 Rules:
 
 - **Five short files, each under a page.** The pack is a thinking tool, not a
@@ -344,14 +357,22 @@ Review protocol:
 
 - Node.js **22 LTS** and pnpm **12** are pinned by `package.json` and the
   lockfile. Install from the lockfile; do not chase new versions mid-ticket.
-- Workspace globs: `packages/*`, `factory/*`, `sites/*` (see
-  `pnpm-workspace.yaml`). Templates live at `factory/templates/<template>` and
-  are copied into `sites/<slug>`, not linked.
+- Workspace globs: `packages/*` and `factory/*` only (see
+  `pnpm-workspace.yaml`). `sites/<slug>` is deliberately **not** a workspace
+  member: each site is a standalone shippable project with its own
+  `package.json` and lockfile, so the factory build graph cannot couple client
+  deliveries together. Templates live at `factory/templates/<template>` and are
+  copied into `sites/<slug>`, not linked.
+- **Import boundary:** `factory/*` may depend on `packages/*`, but `packages/*`
+  must never depend on or import from `factory/*`. Shared code goes in
+  `packages/`; factory-only tooling stays in `factory/`.
 - Root scripts: `pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm test` run
-  per-package where a script exists; `pnpm check` runs all four.
+  per-package across the factory workspace where a script exists; `pnpm check`
+  runs all four. They do not build client sites — run install, build and checks
+  from inside `sites/<slug>/` with its own lockfile.
 - Site layout: `sites/<client-slug>/factory.config.json` (template, version,
-  lane, metadata), `docs/` (brief, decisions, licences, evidence), and
-  `src/` or `app/`.
+  lane, metadata), `docs/` (brief, decisions, licences, evidence), `src/` or
+  `app/`, and its own `package.json` and lockfile.
 - Durable artifacts only under `sites/<slug>/docs/`; planning stays in
   `.factory/` and is gitignored.
 - Factory configuration belongs in `factory/config/`; brief schema in

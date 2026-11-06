@@ -26,7 +26,7 @@ is the default unit of work; larger scopes are split into tickets.
 website-factory/
 ├── AGENTS.md                 # operating rules for agents in this repo
 ├── README.md                 # this operator guide
-├── pnpm-workspace.yaml       # packages/*, factory/*, sites/*
+├── pnpm-workspace.yaml       # packages/* and factory/* (not sites/)
 ├── package.json              # private root, monorepo scripts
 ├── docs/                     # blueprint and standards
 ├── factory/
@@ -40,7 +40,7 @@ website-factory/
 │   ├── motion/               # shared GSAP/Lenis utilities
 │   ├── sections/             # vendored, restyled registry components
 │   └── qa/                   # Playwright, axe and Lighthouse presets
-└── sites/                    # one directory per client site
+└── sites/                    # standalone client projects (own lockfiles)
 ```
 
 Directories are scaffolded in this first foundation ticket. The scripts,
@@ -72,7 +72,11 @@ pnpm install --frozen-lockfile
 | `pnpm check` | Build, typecheck, lint and test across the workspace |
 
 The workspace is empty of packages in this skeleton, so the recursive commands
-are no-ops until packages and sites define their own scripts.
+are no-ops until packages define their own scripts. Client sites are **not**
+workspace members: install, build and verify each one from `sites/<slug>/`
+using its own `package.json` and lockfile. This keeps each deliverable
+independently shippable and stops one client's dependency graph from affecting
+another site or the factory build graph.
 
 ## How agents work in isolated worktrees
 
@@ -108,17 +112,21 @@ gate, is in [`AGENTS.md`](AGENTS.md).
 ## How client sites are generated
 
 A client site starts as a copy of a maintained template, so it can diverge
-safely without changing the template for everyone:
+safely without changing the template for everyone. Each site is an independent
+project with its own package and lockfile boundary, not a member of the factory
+workspace:
 
 1. Choose a lane and template — `editorial-serif`, `editorial-sans`,
    `immersive-webgl` or `immersive-video`.
 2. Copy `factory/templates/<template>` to `sites/<client-slug>/` (copy, never
-   link).
+   link). The site owns its `package.json` and `pnpm-lock.yaml`.
 3. Add `sites/<client-slug>/factory.config.json` with the template, version,
    lane and site metadata.
 4. Write the site's durable docs under `sites/<slug>/docs/`: `brief.md`,
    `decisions.md`, `LICENSES.md` and final evidence.
-5. Build, verify and capture evidence; open one PR for the site.
+5. Install, build, verify and capture evidence from inside `sites/<slug>/`:
+   `cd sites/<slug> && pnpm install --frozen-lockfile && pnpm check`.
+6. Open one PR for the site. The factory workspace commands never build it.
 
 The intended entry point from blueprint §5.2 is:
 
@@ -127,8 +135,8 @@ pnpm factory:new -- --slug acme --lane editorial --template editorial-serif
 ```
 
 The generator is not part of this skeleton; until the factory-scripts ticket
-lands, step 2 is a manual copy. CI is path-filtered per site so one build does
-not pay for every client.
+lands, step 2 is a manual copy. The planned CI is path-filtered per site so one
+build does not pay for every client.
 
 ## Status
 
