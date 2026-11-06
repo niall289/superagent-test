@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Add 23% VAT to a net amount and see the full breakdown." />
+    <title>VAT Calculator</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #eef2f9;
+        --page-glow: #dbe7ff;
+        --surface: #ffffff;
+        --surface-muted: #f6f8fc;
+        --border: #e3e8f0;
+        --border-strong: #d5dce8;
+        --text: #172033;
+        --muted: #667085;
+        --accent: #335cff;
+        --accent-strong: #2447d8;
+        --accent-soft: #edf1ff;
+        --danger: #c2372c;
+        --shadow: 0 24px 60px -28px rgba(23, 32, 51, 0.35);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --page: #0d1220;
+          --page-glow: #18264a;
+          --surface: #151c2e;
+          --surface-muted: #1b2438;
+          --border: #283349;
+          --border-strong: #354158;
+          --text: #f2f5fb;
+          --muted: #9aa7bf;
+          --accent: #7d97ff;
+          --accent-strong: #9aacff;
+          --accent-soft: #1d2a4d;
+          --danger: #ff9a90;
+          --shadow: 0 28px 70px -30px rgba(0, 0, 0, 0.8);
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 32px 20px;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 15% 10%, var(--page-glow), transparent 42%),
+          radial-gradient(circle at 90% 90%, var(--page-glow), transparent 40%),
+          var(--page);
+        color: var(--text);
+        font-family: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .calculator {
+        width: 100%;
+        max-width: 460px;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .badge::before {
+        content: "%";
+        display: inline-grid;
+        place-items: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: currentColor;
+        color: var(--accent-soft);
+        font-size: 11px;
+        line-height: 1;
+      }
+
+      h1 {
+        margin: 18px 0 8px;
+        font-size: clamp(1.65rem, 5vw, 2rem);
+        font-weight: 750;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+      }
+
+      .intro {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      form {
+        margin-top: 26px;
+      }
+
+      .field-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.875rem;
+        font-weight: 650;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .currency {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-size: 1rem;
+        pointer-events: none;
+      }
+
+      input {
+        width: 100%;
+        padding: 15px 16px 15px 36px;
+        border: 1px solid var(--border-strong);
+        border-radius: 14px;
+        background: var(--surface-muted);
+        color: var(--text);
+        font: inherit;
+        font-size: 1.05rem;
+        font-variant-numeric: tabular-nums;
+        outline: none;
+        transition: border-color 160ms ease, box-shadow 160ms ease,
+          background 160ms ease;
+      }
+
+      input::placeholder {
+        color: var(--muted);
+        opacity: 0.75;
+      }
+
+      input:hover {
+        border-color: var(--muted);
+      }
+
+      input:focus-visible {
+        border-color: var(--accent);
+        background: var(--surface);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+      }
+
+      input[aria-invalid="true"] {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
+      }
+
+      .error {
+        display: none;
+        margin: 8px 0 0;
+        color: var(--danger);
+        font-size: 0.82rem;
+        font-weight: 550;
+      }
+
+      .error.is-visible {
+        display: block;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 16px;
+        padding: 15px 18px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--accent);
+        color: #ffffff;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 160ms ease, transform 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      button:hover {
+        background: var(--accent-strong);
+        box-shadow: 0 10px 24px -12px var(--accent);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button:focus-visible {
+        outline: 3px solid var(--accent-soft);
+        outline-offset: 3px;
+      }
+
+      .result-card {
+        margin-top: 24px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--surface-muted);
+        overflow: hidden;
+      }
+
+      .result-card[hidden] {
+        display: none;
+      }
+
+      .result-card:not([hidden]) {
+        animation: rise 240ms ease-out;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .result-rate {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        letter-spacing: 0.04em;
+      }
+
+      .breakdown {
+        margin: 0;
+        padding: 6px 18px 14px;
+      }
+
+      .row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 0;
+      }
+
+      .row dt {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .row dd {
+        margin: 0;
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .row--total {
+        margin-top: 2px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+
+      .row--total dt {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 650;
+      }
+
+      .row--total dd {
+        color: var(--accent-strong);
+        font-size: 1.35rem;
+        font-weight: 750;
+        letter-spacing: -0.02em;
+      }
+
+      .note {
+        margin: 0;
+        padding: 0 18px 16px;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 420px) {
+        .calculator {
+          padding: 24px;
+          border-radius: 20px;
+        }
+
+        body {
+          padding: 20px 14px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="calculator" aria-labelledby="title">
+      <span class="badge">Standard rate</span>
+      <h1 id="title">VAT Calculator</h1>
+      <p class="intro">Enter a net amount to add 23% VAT and see the breakdown.</p>
+
+      <form id="vat-form" novalidate>
+        <div class="field">
+          <label class="field-label" for="amount">Net amount</label>
+          <div class="input-wrap">
+            <span class="currency" aria-hidden="true">&euro;</span>
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              autocomplete="off"
+              aria-describedby="amount-error"
+            />
+          </div>
+          <p class="error" id="amount-error" role="alert"></p>
+        </div>
+        <button type="submit">Calculate VAT</button>
+      </form>
+
+      <section
+        class="result-card"
+        id="result"
+        role="status"
+        aria-live="polite"
+        aria-label="VAT result breakdown"
+        hidden
+      >
+        <div class="result-head">
+          <span>Result breakdown</span>
+          <span class="result-rate">23% VAT</span>
+        </div>
+        <dl class="breakdown">
+          <div class="row">
+            <dt>Net amount</dt>
+            <dd id="net-amount">&euro;0.00</dd>
+          </div>
+          <div class="row">
+            <dt>VAT (23%)</dt>
+            <dd id="vat-amount">&euro;0.00</dd>
+          </div>
+          <div class="row row--total">
+            <dt>Gross total</dt>
+            <dd id="gross-amount">&euro;0.00</dd>
+          </div>
+        </dl>
+        <p class="note">Gross total is rounded to the nearest cent.</p>
+      </section>
+    </main>
+
+    <script src="utils.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        const form = document.getElementById("vat-form");
+        const input = document.getElementById("amount");
+        const error = document.getElementById("amount-error");
+        const result = document.getElementById("result");
+        const netOutput = document.getElementById("net-amount");
+        const vatOutput = document.getElementById("vat-amount");
+        const grossOutput = document.getElementById("gross-amount");
+        const currency = new Intl.NumberFormat("en-IE", {
+          style: "currency",
+          currency: "EUR",
+        });
+
+        function clearError() {
+          error.textContent = "";
+          error.classList.remove("is-visible");
+          input.removeAttribute("aria-invalid");
+        }
+
+        function showError(message) {
+          error.textContent = message;
+          error.classList.add("is-visible");
+          input.setAttribute("aria-invalid", "true");
+          result.hidden = true;
+          input.focus();
+        }
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const rawValue = input.value.trim();
+          if (rawValue === "") {
+            showError("Enter an amount to calculate VAT.");
+            return;
+          }
+
+          const amount = Number(rawValue);
+          if (!Number.isFinite(amount) || amount < 0) {
+            showError("Enter a valid amount of 0 or more.");
+            return;
+          }
+
+          const net = Math.round(amount * 100) / 100;
+          const gross = calculateVat(net);
+          const vat = Math.round((gross - net) * 100) / 100;
+
+          netOutput.textContent = currency.format(net);
+          vatOutput.textContent = currency.format(vat);
+          grossOutput.textContent = currency.format(gross);
+          clearError();
+          result.hidden = false;
+        });
+
+        input.addEventListener("input", function () {
+          clearError();
+          result.hidden = true;
+        });
+      })();
+    </script>
+  </body>
+</html>
