@@ -1,0 +1,136 @@
+/* ==========================================================================
+   @factory/tokens — Master Design tokens
+   Archetype A: Engageio Dark.
+
+   This is the single source of design truth for every factory site. Sites
+   import this file and override only what the approved art-direction memo
+   justifies (normally `--accent`). Values are mirrored for machines in
+   `design-tokens.json`; `packages/tokens/test/tokens.test.mjs` keeps the two
+   in sync.
+
+   Dark is a designed state, not an inversion: surfaces step up by small
+   luminance increments and every text colour is a tinted neutral.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* Colour — surfaces --------------------------------------------------- */
+  --canvas: #09090b;
+  --surface-1: #121215;
+  --surface-2: #18181b;
+  /* One-hairline divider: borders read as a cut in the surface, not a box. */
+  --hairline: rgba(255, 255, 255, 0.08);
+
+  /* Colour — text ------------------------------------------------------- */
+  --text-1: #fafafa;
+  --text-2: #a1a1aa;
+  /* 4.12:1 on --canvas: use for metadata and large text only, never body. */
+  --text-3: #71717a;
+
+  /* Colour — brand accent ---------------------------------------------- */
+  /* A single accent. Override per design memo; do not add a second one. */
+  --accent: #d4a72c;
+
+  /* Colour — status (desaturated so status never shouts) --------------- */
+  --ok: #7fae8b;
+  --warn: #c2a15b;
+  --danger: #c97a7a;
+  --info: #7d9bb8;
+
+  /* Radius — concentric corners ----------------------------------------
+     Nested corners stay concentric: inner = outer − gap. With an 8 px
+     gap, a --r-md (12 px) card holds a --r-sm (6 px) control.            */
+  --r-sm: 6px;
+  --r-md: 12px;
+
+  /* Typography ---------------------------------------------------------
+     One display/text pairing: Geist with Plus Jakarta Sans as the fallback
+     character face. Mono is tabular for numbers, code and timestamps.   */
+  --font-sans: Geist, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+  --font-variant-numeric-tabular: tabular-nums;
+
+  /* Fluid scale: ~1.25 modular ratio between steps. */
+  --text-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --text-lg: clamp(1.25rem, 1.1rem + 0.75vw, 1.625rem);
+  --text-display: clamp(2.5rem, 1.6rem + 4.5vw, 5rem);
+
+  --leading-tight: 1.15;
+  --leading-body: 1.55;
+  --leading-display: 0.98;
+
+  /* Three weights maximum on any one page. */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* 55–75 characters: long-form copy stops here. */
+  --measure: 65ch;
+
+  /* Spacing — 4/8 px base unit ----------------------------------------- */
+  --space-unit: 4px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Section rhythm: 48–80 px mobile, 80–160 px desktop. */
+  --section-y-mobile: 64px;
+  --section-y-desktop: 128px;
+
+  /* Gutters: 16/24/32 px by breakpoint. */
+  --gutter-mobile: 16px;
+  --gutter-tablet: 24px;
+  --gutter-desktop: 32px;
+
+  --content-max: 80rem;
+
+  /* Layer order --------------------------------------------------------- */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* Motion --------------------------------------------------------------
+     UI feedback 150 ms, entrances 300 ms, narrative 600 ms, stagger 60 ms.
+     Spring values are consumed by the motion layer (GSAP / Motion).      */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-narrative: 600ms;
+  --stagger: 60ms;
+
+  --spring-stiffness: 260;
+  --spring-damping: 20;
+
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Motion layer multiplier: 1 = full motion, 0 = reduced motion. */
+  --motion-scale: 1;
+}
+
+/* Reduced motion is a first-class path, never an afterthought. Durations
+   collapse to an imperceptible value so JS-driven timelines settle without
+   motion; stagger is removed and the motion layer reads --motion-scale: 0. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-narrative: 0.01ms;
+    --stagger: 0ms;
+    --motion-scale: 0;
+  }
+}

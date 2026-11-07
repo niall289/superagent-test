@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "description": "Master Design filler blacklist. The anti-slop compiler gate fails when any phrase appears in scanned source or markdown. Entries are matched case-insensitively as whole phrases.",
+  "phrases": [
+    "seamless",
+    "cutting-edge",
+    "revolutionize",
+    "unlock",
+    "unleash",
+    "elevate",
+    "supercharge",
+    "next-gen",
+    "game-changer",
+    "in today's fast-paced",
+    "lorem ipsum",
+    "john doe",
+    "jane doe"
+  ]
+}
