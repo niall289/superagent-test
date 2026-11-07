@@ -65,7 +65,7 @@ editorial-serif/
 │   ├── scripts/motion.ts     # Lenis + GSAP, reduced-motion aware
 │   ├── styles/tokens.css     # pinned @factory/tokens snapshot
 │   └── styles/global.css     # token theme, components
-├── public/                   # favicons, OG image, robots.txt
+├── public/                   # favicons and OG image
 ├── scripts/check-links.mjs
 ├── DESIGN.md
 ├── LICENSES.md
@@ -128,8 +128,8 @@ from approved site content. Add ratings, awards or profiles to the JSON-LD only
 when the client has supplied the evidence.
 
 Replace `public/og-default.png` (1200 × 630) and keep
-`public/og-default.svg` as the editable source. `public/robots.txt` points at
-the generated sitemap; change the origin there when the site URL changes.
+`public/og-default.svg` as the editable source. `src/pages/robots.txt.ts` points at the generated sitemap and derives the
+origin from `src/content/site/site.json`, so the two cannot drift.
 
 ## Motion and accessibility
 
