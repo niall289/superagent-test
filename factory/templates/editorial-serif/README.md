@@ -156,6 +156,9 @@ The anti-slop gate rejects filler phrases from
 colour utilities. This template uses token variables throughout, including in
 the technical plates.
 
+Reference captures for template 0.1.0, including the scaffold baseline for the
+foundation ticket, live in `docs/evidence/`.
+
 ## Demo content and legal text
 
 The brand, staff names, project data, registration numbers and phone numbers

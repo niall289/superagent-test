@@ -3,8 +3,8 @@
   <rect x="40" y="40" width="1120" height="550" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
   <line x1="40" y1="150" x2="1160" y2="150" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
   <line x1="40" y1="470" x2="1160" y2="470" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-  <text x="64" y="105" fill="#d4a72c" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-size="18" letter-spacing="4">KILBRIDE ELECTRICAL / SWORDS, CO. DUBLIN</text>
-  <text x="64" y="118" fill="#71717a" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-size="16" letter-spacing="3">SINGLE LINE E-104 · 400 A TPN</text>
+  <text x="64" y="96" fill="#d4a72c" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-size="18" letter-spacing="4">KILBRIDE ELECTRICAL / SWORDS, CO. DUBLIN</text>
+  <text x="64" y="124" fill="#71717a" font-family="ui-monospace, 'DejaVu Sans Mono', monospace" font-size="16" letter-spacing="3">SINGLE LINE E-104 · 400 A TPN</text>
   <text x="64" y="300" fill="#fafafa" font-family="'Newsreader Variable', Georgia, serif" font-size="92" letter-spacing="-3">We keep old buildings</text>
   <text x="64" y="395" fill="#d4a72c" font-family="'Newsreader Variable', Georgia, serif" font-size="92" font-style="italic" letter-spacing="-3">working.</text>
   <text x="64" y="525" fill="#a1a1aa" font-family="'Newsreader Variable', Georgia, serif" font-size="26">Commercial and conservation electrical contractors since 1974.</text>
