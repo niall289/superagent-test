@@ -162,6 +162,6 @@ build does not pay for every client.
 ## Status
 
 This repository contains the foundation skeleton (Ticket 1), the doctor and
-smoke script (Ticket 2), and the design tokens, anti-slop compiler gate and
-prompt optimizer (Ticket 3). Next foundation tickets add the editorial
-template, the QA harness, evidence automation and CI.
+smoke script (Ticket 2), the design tokens, anti-slop compiler gate and prompt
+optimizer (Ticket 3), and the `editorial-serif` template (Ticket 4). Next
+foundation tickets add the QA harness, evidence automation and CI.

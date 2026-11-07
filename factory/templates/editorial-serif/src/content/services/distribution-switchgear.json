@@ -1,0 +1,14 @@
+{
+  "order": 2,
+  "title": "Distribution and switchgear",
+  "summary": "Board replacements, sub-mains, LV distribution and metering, planned around buildings that cannot close.",
+  "body": "Most of our distribution work happens in occupied buildings. We survey the existing installation, map the critical circuits, and phase the changeover so lifts, servers and cold rooms stay on. Temporary supplies are part of the method statement, not an afterthought.",
+  "deliverables": [
+    "Survey and critical-circuit register before any isolation",
+    "Phased method statement and temporary supply plan",
+    "New boards, submains and metering installed and labelled",
+    "Schedule of circuits and updated single-line diagram"
+  ],
+  "leadTime": "2–6 weeks per phase",
+  "standards": ["IS 10101:2020", "ET101:2008"]
+}

@@ -1,0 +1,14 @@
+{
+  "order": 4,
+  "title": "Testing, certification and maintenance",
+  "summary": "Periodic inspection, thermal surveys, RCD testing and planned maintenance for occupied premises.",
+  "body": "A test should produce a work list, not a folder of numbers. We inspect and test to IS 10101, photograph every defect, and price the remedials in the same visit. Landlords and facility managers get a dated report they can act on.",
+  "deliverables": [
+    "Periodic inspection and test report with photographic defects",
+    "Thermal survey of boards and submains under load",
+    "RCD and emergency lighting function tests",
+    "Prioritised remedial schedule with fixed prices"
+  ],
+  "leadTime": "Single-day inspection; report within five working days",
+  "standards": ["IS 10101:2020"]
+}

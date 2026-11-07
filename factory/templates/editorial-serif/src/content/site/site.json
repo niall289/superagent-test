@@ -1,0 +1,47 @@
+{
+  "name": "Kilbride Electrical",
+  "legalName": "Kilbride Electrical Contractors Limited",
+  "tagline": "Commercial and conservation electrical contractors",
+  "description": "Electrical installation, distribution, emergency lighting and certification for commercial buildings across Dublin and the east coast. Safe Electric registered, working from Swords since 1974.",
+  "url": "https://kilbride-electrical.example",
+  "locale": "en_IE",
+  "founded": 1974,
+  "phone": "+353 1 555 0140",
+  "phoneHref": "+35315550140",
+  "emergencyPhone": "+353 87 555 0142",
+  "emergencyPhoneHref": "+353875550142",
+  "email": "estimating@kilbride-electrical.example",
+  "address": {
+    "street": "Unit 4, Mill Yard, Balheary",
+    "locality": "Swords",
+    "region": "Co. Dublin",
+    "postcode": "K67 X2R8",
+    "country": "IE"
+  },
+  "registration": {
+    "cro": "641209",
+    "vat": "IE 3624109 AH",
+    "safeElectric": "R-004821",
+    "publicLiability": "€10m"
+  },
+  "serviceArea": ["Dublin", "Fingal", "Wicklow", "Meath"],
+  "hours": [
+    { "days": "Monday to Friday", "hours": "07:30–17:30" },
+    { "days": "Emergency call-out", "hours": "24 hours, 7 days" }
+  ],
+  "nav": [
+    { "label": "Work", "href": "/#work" },
+    { "label": "Services", "href": "/#services" },
+    { "label": "Standards", "href": "/#standards" },
+    { "label": "Contact", "href": "/#contact" }
+  ],
+  "legal": {
+    "privacyPath": "/privacy",
+    "termsPath": "/terms",
+    "disclaimers": [
+      "All electrical installation work is carried out to IS 10101:2020 and certified on completion.",
+      "Work in Northern Ireland is designed and certified to BS 7671 (18th Edition).",
+      "Emergency call-outs outside Dublin, Fingal, Wicklow and Meath may incur a call-out charge, quoted before attendance."
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+---
+import type { ServiceData } from '../lib/content'
+
+interface Props {
+  services: ServiceData[]
+}
+
+const { services } = Astro.props
+---
+
+<section id="services" class="section" aria-labelledby="services-title">
+  <div class="container services__grid">
+    <div class="services__intro" data-motion="reveal">
+      <p class="eyebrow">01 — Services</p>
+      <h2 id="services-title" class="section-title">Four kinds of work. One standard of finish.</h2>
+      <p class="lede">
+        We take on the jobs where the building has to stay open: phased board changes, rewires in
+        occupied offices, and certification that stands up to a landlord's audit.
+      </p>
+      <p class="body-copy">
+        Every job starts with a survey and a written method statement. Every job ends with test
+        results, as-built drawings and a certificate in the client's name — not ours.
+      </p>
+      <a class="text-link" href="#contact">Ask for a survey <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="services__list">
+      {services.map((service, index) => (
+        <article class="service" data-motion="reveal">
+          <p class="service__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</p>
+          <div>
+            <h3 class="service__title">{service.title}</h3>
+            <p class="service__summary">{service.summary}</p>
+            <p class="service__body">{service.body}</p>
+            <ul class="service__deliverables">
+              {service.deliverables.map((item) => <li>{item}</li>)}
+            </ul>
+            <p class="service__meta">
+              <span>Programme: {service.leadTime}</span>
+              <span>Standards: {service.standards.join(' · ')}</span>
+            </p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

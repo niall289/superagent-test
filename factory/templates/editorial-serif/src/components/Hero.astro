@@ -1,0 +1,47 @@
+---
+import type { SiteData } from '../lib/content'
+import HeroPlate from './plates/HeroPlate.astro'
+
+interface Props {
+  site: SiteData
+}
+
+const { site } = Astro.props
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">Swords, Co. Dublin · since {site.founded}</p>
+      <h1 id="hero-title" class="display hero__title">
+        We keep old buildings working and new ones <em>compliant</em>.
+      </h1>
+      <p class="hero__lede">
+        Commercial and conservation electrical contractors for Dublin's offices, warehouses and
+        cold stores. We design the installation, install it, and sign it off — one team from load
+        schedule to certificate.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#contact">Start an enquiry</a>
+        <a class="btn btn--ghost" href="#work">See recent work</a>
+      </div>
+      <dl class="hero__facts">
+        <div class="hero__fact">
+          <dt>Safe Electric</dt>
+          <dd>{site.registration.safeElectric}</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>CRO</dt>
+          <dd>{site.registration.cro}</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>Public liability</dt>
+          <dd>{site.registration.publicLiability}</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="hero__plate">
+      <HeroPlate />
+    </div>
+  </div>
+</section>

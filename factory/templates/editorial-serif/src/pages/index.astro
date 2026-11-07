@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Hero from '../components/Hero.astro'
+import ProofBar from '../components/ProofBar.astro'
+import Services from '../components/Services.astro'
+import Projects from '../components/Projects.astro'
+import ContactTriage from '../components/ContactTriage.astro'
+import { getProjects, getServices, getSite } from '../lib/content'
+import { buildBusinessJsonLd } from '../lib/seo'
+
+const site = await getSite()
+const services = await getServices()
+const projects = await getProjects()
+const siteUrl = Astro.site ?? new URL(site.url)
+
+const title = `${site.name} — commercial electrical contractors, Swords`
+const description =
+  'Commercial and conservation electrical contractors in Swords, Co. Dublin. Distribution, lighting, emergency lighting, fire alarm, testing and certification. Safe Electric registered since 1974.'
+---
+
+<Layout title={title} description={description} jsonLd={buildBusinessJsonLd(site, siteUrl)}>
+  <Hero site={site} />
+  <ProofBar site={site} />
+  <Services services={services} />
+  <Projects projects={projects} />
+  <ContactTriage site={site} />
+</Layout>
