@@ -68,15 +68,36 @@ pnpm install --frozen-lockfile
 | `pnpm build` | Run `build` in every workspace package that defines it |
 | `pnpm typecheck` | Run `typecheck` in every workspace package that defines it |
 | `pnpm lint` | Run `lint` in every workspace package that defines it |
-| `pnpm test` | Run `test` in every workspace package that defines it |
-| `pnpm check` | Build, typecheck, lint and test across the workspace |
+| `pnpm lint:anti-slop` | Scan source and markdown for filler, pure black and raw Tailwind colour literals |
+| `pnpm test` | Run `test` in every workspace package, then the factory script tests |
+| `pnpm check` | Build, typecheck, lint, anti-slop and test across the workspace |
+| `pnpm factory:doctor` | Read-only environment diagnostics |
+| `pnpm factory:prompt "<shorthand>"` | Expand operator shorthand into a five-file spec-pack mandate |
+| `pnpm factory:smoke` | Doctor plus the full workspace check |
 
-The workspace is empty of packages in this skeleton, so the recursive commands
-are no-ops until packages define their own scripts. Client sites are **not**
+The workspace contains shared packages, not client sites, so the recursive
+commands only run the packages that define a script. Client sites are **not**
 workspace members: install, build and verify each one from `sites/<slug>/`
 using its own `package.json` and lockfile. This keeps each deliverable
 independently shippable and stops one client's dependency graph from affecting
 another site or the factory build graph.
+
+## Design tokens, anti-slop gate and intake
+
+`packages/tokens` (`@factory/tokens`) holds the Master Design tokens for
+Archetype A (Engageio Dark) in `tokens.css` and `design-tokens.json`; see its
+README for values and usage. Sites import the CSS and override only the single
+accent the design memo justifies.
+
+The anti-slop compiler gate (`pnpm lint:anti-slop`) fails on the filler
+blacklist in `factory/config/banned-phrases.json`, pure black literals and raw
+Tailwind colour literals. It scans source and markdown, exempts token files
+from the colour rules, and supports reviewed suppression comments.
+
+`pnpm factory:prompt "Electrician in Swords, luxury feel"` expands shorthand into
+a five-file spec-pack mandate with task IDs, token mapping, evidence
+requirements and acceptance checks. Use `--format issue` for an issue body or
+`--format json` for tooling.
 
 ## How agents work in isolated worktrees
 
@@ -140,8 +161,7 @@ build does not pay for every client.
 
 ## Status
 
-This repository currently contains the foundation skeleton (Ticket 1):
-workspace configuration, `AGENTS.md`, this operator guide and the directory
-layout from blueprint §5.1. Next foundation tickets add the doctor and smoke
-scripts, design tokens, the editorial template, the QA harness, evidence
-automation and CI.
+This repository contains the foundation skeleton (Ticket 1), the doctor and
+smoke script (Ticket 2), and the design tokens, anti-slop compiler gate and
+prompt optimizer (Ticket 3). Next foundation tickets add the editorial
+template, the QA harness, evidence automation and CI.

@@ -12,9 +12,12 @@
     "build": "pnpm -r --if-present run build",
     "typecheck": "pnpm -r --if-present run typecheck",
     "lint": "pnpm -r --if-present run lint",
-    "test": "pnpm -r --if-present run test",
-    "check": "pnpm run build && pnpm run typecheck && pnpm run lint && pnpm run test",
+    "lint:anti-slop": "node factory/scripts/anti-slop-lint.mjs",
+    "test": "pnpm -r --if-present run test && pnpm run test:factory",
+    "test:factory": "node --test factory/scripts/anti-slop-lint.test.mjs factory/scripts/prompt-optimizer.test.mjs",
+    "check": "pnpm run build && pnpm run typecheck && pnpm run lint && pnpm run lint:anti-slop && pnpm run test",
     "factory:doctor": "node factory/scripts/doctor.mjs",
+    "factory:prompt": "node factory/scripts/prompt-optimizer.mjs",
     "factory:smoke": "node factory/scripts/doctor.mjs && pnpm check"
   }
 }

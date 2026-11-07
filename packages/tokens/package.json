@@ -1,0 +1,22 @@
+{
+  "name": "@factory/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Master Design tokens for the Autonomous Website Factory: colour, type, spacing, radii, motion and layer primitives.",
+  "type": "module",
+  "exports": {
+    ".": "./design-tokens.json",
+    "./tokens.css": "./tokens.css",
+    "./design-tokens.json": "./design-tokens.json"
+  },
+  "files": [
+    "tokens.css",
+    "design-tokens.json"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "test": "node --test"
+  }
+}
