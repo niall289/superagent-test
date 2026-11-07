@@ -1,0 +1,22 @@
+{
+  "order": 1,
+  "title": "Sandyford logistics hub",
+  "sector": "Logistics",
+  "location": "Sandyford, Dublin 18",
+  "year": 2025,
+  "summary": "A 1,850 m² warehouse fit-out delivered in fourteen weeks while the building stayed operational.",
+  "brief": "The tenant needed racking power, high-bay lighting and a new 400 A supply without interrupting inbound deliveries. The existing board had no spare ways.",
+  "outcome": "We split the changeover across two weekends, ran temporary supplies to the cold rooms, and handed over a board with 18 spare ways and labelled submains. Illuminance at the racking face measured 310 lux against the 300 lux design target.",
+  "specs": [
+    { "label": "Floor area", "value": "1,850 m²" },
+    { "label": "Supply", "value": "400 A TPN" },
+    { "label": "High-bay luminaires", "value": "96 × 150 W LED" },
+    { "label": "Programme", "value": "14 weeks" },
+    { "label": "Completed", "value": "March 2025" }
+  ],
+  "plate": {
+    "id": "warehouse",
+    "alt": "Plan drawing of the warehouse racking grid with luminaire positions and the new distribution board marked at the north wall.",
+    "caption": "Racking grid and luminaire layout, drawing E-204."
+  }
+}

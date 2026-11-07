@@ -1,0 +1,14 @@
+{
+  "order": 3,
+  "title": "Emergency lighting and fire alarm",
+  "summary": "Emergency lighting and fire detection designed, installed and commissioned to Irish standards.",
+  "body": "We design to the escape route, not the catalogue. Photometric layouts show the maintained illuminance on the actual route; detection zoning follows the building's compartmentation. Commissioning includes a full duration test and a signed certificate.",
+  "deliverables": [
+    "Escape-route survey and photometric layout",
+    "Detection zoning drawing agreed with the fire officer",
+    "Installation, commissioning and full duration test",
+    "Commissioning certificate and log book"
+  ],
+  "leadTime": "3–8 weeks",
+  "standards": ["IS 3218", "IS 3219"]
+}

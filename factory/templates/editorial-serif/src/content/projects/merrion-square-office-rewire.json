@@ -1,0 +1,22 @@
+{
+  "order": 2,
+  "title": "Merrion Square office rewire",
+  "sector": "Conservation",
+  "location": "Merrion Square, Dublin 2",
+  "year": 2024,
+  "summary": "A five-storey Georgian office rewired without disturbing original cornices or joinery.",
+  "brief": "The 1970s rubber installation had failed insulation resistance tests on two floors. The conservation officer required the cornices, shutters and joinery to remain untouched.",
+  "outcome": "We pulled singles through existing voids, used brass floor trunking only where the officer approved it, and replaced 46 circuits over nine weeks. The final test sheet recorded insulation resistance above 200 MΩ on every circuit.",
+  "specs": [
+    { "label": "Floor area", "value": "620 m²" },
+    { "label": "Circuits replaced", "value": "46" },
+    { "label": "Cable system", "value": "Singles in existing voids" },
+    { "label": "Programme", "value": "9 weeks" },
+    { "label": "Completed", "value": "November 2024" }
+  ],
+  "plate": {
+    "id": "georgian",
+    "alt": "Elevation drawing of a Georgian window bay showing concealed conduit routes down to floor trunking.",
+    "caption": "Window bay and concealed route, drawing E-117."
+  }
+}

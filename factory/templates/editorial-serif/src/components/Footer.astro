@@ -1,0 +1,68 @@
+---
+import type { SiteData } from '../lib/content'
+
+interface Props {
+  site: SiteData
+}
+
+const { site } = Astro.props
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a class="wordmark" href="/" aria-label={`${site.name} — home`}>
+          <span class="wordmark__mark" aria-hidden="true">K</span>
+          <span class="wordmark__name">{site.name}</span>
+        </a>
+        <p class="footer__brand">
+          Commercial and conservation electrical contractors. Design, installation, testing and
+          certification under one registration.
+        </p>
+        <address class="footer__address">
+          {site.address.street}<br />
+          {site.address.locality}, {site.address.region}, {site.address.postcode}<br />
+          <a href={`tel:${site.phoneHref}`}>{site.phone}</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </address>
+      </div>
+
+      <div>
+        <h2 class="footer__title">Navigate</h2>
+        <ul class="footer__links">
+          {site.nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+          <li><a href={site.legal.privacyPath}>Privacy</a></li>
+          <li><a href={site.legal.termsPath}>Terms</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__title">Statutory</h2>
+        <ul class="footer__links">
+          <li><span class="footer__legal-line">CRO {site.registration.cro}</span></li>
+          <li><span class="footer__legal-line">VAT {site.registration.vat}</span></li>
+          <li><span class="footer__legal-line">Safe Electric {site.registration.safeElectric}</span></li>
+          <li><span class="footer__legal-line">Public liability {site.registration.publicLiability}</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      {site.legal.disclaimers.map((disclaimer) => <p>{disclaimer}</p>)}
+      <p>
+        {site.legalName} is registered in Ireland. Company registration number
+        {site.registration.cro}. Registered office: {site.address.street}, {site.address.locality},
+        {site.address.region}, {site.address.postcode}.
+      </p>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p>Emergency line: <a href={`tel:${site.emergencyPhoneHref}`}>{site.emergencyPhone}</a></p>
+    </div>
+  </div>
+</footer>

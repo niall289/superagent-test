@@ -1,0 +1,18 @@
+{
+  "name": "editorial-serif",
+  "version": "0.1.0",
+  "lane": "editorial",
+  "framework": "astro@5",
+  "styling": "tailwind@4",
+  "tokens": "@factory/tokens (pinned snapshot)",
+  "sections": [
+    "Header",
+    "Hero",
+    "ProofBar",
+    "Services",
+    "Projects",
+    "ContactTriage",
+    "Footer"
+  ],
+  "routes": ["/", "/privacy", "/terms", "/404"]
+}

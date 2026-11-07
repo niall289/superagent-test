@@ -1,0 +1,22 @@
+{
+  "order": 3,
+  "title": "Dublin Port cold store",
+  "sector": "Cold storage",
+  "location": "Alexandra Road, Dublin 1",
+  "year": 2023,
+  "summary": "A 400 A supply upgrade and six freezer-room submains, completed with the store at −25 °C.",
+  "brief": "A second blast freezer pushed the existing supply past its design load. The store could not defrost, so the work had to happen in live conditions.",
+  "outcome": "We installed a new 400 A supply, six monitored submains and a standby changeover, working in 90-minute windows between defrost cycles. The store stayed below −22 °C throughout.",
+  "specs": [
+    { "label": "Supply", "value": "400 A TPN" },
+    { "label": "Freezer rooms", "value": "6" },
+    { "label": "Submain monitoring", "value": "6 circuits" },
+    { "label": "Programme", "value": "6 weeks" },
+    { "label": "Completed", "value": "August 2023" }
+  ],
+  "plate": {
+    "id": "cold-store",
+    "alt": "Single-line diagram of the cold store supply with six freezer-room submains and a standby changeover.",
+    "caption": "Supply and submains, drawing E-302."
+  }
+}

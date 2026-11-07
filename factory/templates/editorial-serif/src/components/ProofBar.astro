@@ -1,0 +1,46 @@
+---
+import type { SiteData } from '../lib/content'
+
+interface Props {
+  site: SiteData
+}
+
+const { site } = Astro.props
+
+const items = [
+  {
+    value: site.registration.safeElectric,
+    label: 'Safe Electric registered',
+    evidence: `safe-electric:${site.registration.safeElectric}`,
+  },
+  {
+    value: site.registration.cro,
+    label: 'Companies Registration Office',
+    evidence: `cro:${site.registration.cro}`,
+  },
+  {
+    value: site.registration.publicLiability,
+    label: 'Public liability cover',
+    evidence: 'insurance:public-liability',
+  },
+  {
+    value: String(site.founded),
+    label: 'Working from Swords since',
+    evidence: `founded:${site.founded}`,
+  },
+]
+---
+
+<section id="standards" class="proof" aria-labelledby="standards-title">
+  <h2 id="standards-title" class="visually-hidden">Registration and standards</h2>
+  <div class="container">
+    <div class="proof__grid" data-motion="reveal">
+      {items.map((item) => (
+        <div class="proof__item" data-evidence={item.evidence}>
+          <p class="proof__value">{item.value}</p>
+          <p class="proof__label">{item.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@factory/tokens':
-        specifier: file:../../../packages/tokens
-        version: file:../../../packages/tokens
       '@fontsource-variable/newsreader':
         specifier: ^5.2.5
         version: 5.3.0
@@ -449,9 +446,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@factory/tokens@file:../../../packages/tokens':
-    resolution: {directory: ../../../packages/tokens, type: directory}
 
   '@fontsource-variable/newsreader@5.3.0':
     resolution: {integrity: sha512-rrzYi43qMpbzwuFtf9OkWH8sxAPVPcQQQEwXpPtwaKYeJ8yVg5aLs5kawmo1f2Q1t1M38TLmEKCkGVDsYwgdFw==}
@@ -2581,8 +2575,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.27.7':
     optional: true
-
-  '@factory/tokens@file:../../../packages/tokens': {}
 
   '@fontsource-variable/newsreader@5.3.0': {}
 

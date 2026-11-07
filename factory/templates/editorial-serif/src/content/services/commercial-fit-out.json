@@ -1,0 +1,14 @@
+{
+  "order": 1,
+  "title": "Commercial fit-out",
+  "summary": "Distribution, containment, small power, lighting and fire alarm for new and refitted commercial floors.",
+  "body": "We work from the shell to the handover: load schedule first, containment and cable routes second, then first and second fix. The same foreman runs the job from drawing to certification.",
+  "deliverables": [
+    "Load schedule and single-line diagram before first fix",
+    "Coordinated containment and cable routing drawings",
+    "Lighting layout to EN 12464-1, with measured illuminance at handover",
+    "As-built drawings, test results and completion certificate"
+  ],
+  "leadTime": "6–14 weeks, depending on floor area",
+  "standards": ["IS 10101:2020", "EN 12464-1"]
+}

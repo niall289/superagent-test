@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Page not found"
+  description="That page does not exist. Return to the home page or call the emergency line."
+  noindex
+>
+  <div class="page-head">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1 class="page-head__title">That circuit is dead.</h1>
+    </div>
+  </div>
+
+  <article class="container prose">
+    <p>
+      The page you asked for is not here. It may have moved, or the link may be wrong. The work,
+      services and contact details are on the home page.
+    </p>
+    <p>
+      <a class="btn btn--primary" href="/">Back to the home page</a>
+    </p>
+    <p>
+      Live fault or loss of supply: <a href="tel:+353875550142">+353 87 555 0142</a>. Planned work:
+      <a href="mailto:estimating@kilbride-electrical.example">estimating@kilbride-electrical.example</a>.
+    </p>
+  </article>
+</Layout>
