@@ -1,0 +1,69 @@
+{
+  "id": "fully-wired-cheshire",
+  "sourceClone": "plumbing-fdd41869",
+  "brandSourceClone": "electrical-c5f445f5",
+  "title": "Fully Wired Electrical Services — Verbatim Sliced Header, Hero & Trust Bar (Cheshire)",
+  "tokens": {
+    "--brand-primary": "#142238",
+    "--brand-primary-hover": "#0c1524",
+    "--brand-accent": "#0b7a62",
+    "--brand-accent-hover": "#085e4b",
+    "--brand-dark": "#0d1726",
+    "--brand-dark-alt": "#111e30",
+    "--brand-usp-icon": "#0cac8c",
+    "--brand-font": "'Sora', 'sofia-pro'",
+    "--header-phone-button-bg": "#0b7a62"
+  },
+  "slots": {
+    "logoSrc": "assets/fully-wired-logo-dark.svg",
+    "logoAlt": "Fully Wired Electrical Services - Cheshire",
+    "tagline": "Cheshire’s Trusted – Design. Install. Maintain.",
+    "emergencyLabel": "24hr Callouts & Advice",
+    "phoneDisplay": "07989 174 875",
+    "phoneHref": "tel:07989174875",
+    "navItems": [
+      "Emergency Callouts",
+      "Domestic Electrics",
+      "Lighting Design",
+      "Smart Home",
+      "Commercial",
+      "Case Studies",
+      "All Services"
+    ],
+    "promoBannerDesktopHtml": "<strong>NAPIT &amp; TrustMark Registered Electricians.</strong> Serving Sandbach, Crewe, Nantwich &amp; Cheshire",
+    "promoBannerMobileHtml": "NAPIT &amp; TrustMark Registered across Cheshire",
+    "heroDesktopSrc": "assets/fc35af806fc36c0f.jpg",
+    "heroMobileSrc": "assets/fc35af806fc36c0f.jpg",
+    "trustpilotLabel": "Excellent",
+    "h1Html": "Fully Wired.<br/>Built for Cheshire.",
+    "subtitle": "Bespoke lighting design, consumer unit upgrades, EV chargers, smart home automation and full rewires…",
+    "formPrompt": "I need help with",
+    "initialServiceDisplay": "fuse boards",
+    "services": [
+      "Fuse Boards",
+      "EV Chargers",
+      "Outdoor Lighting",
+      "Full Rewires",
+      "Fault Finding",
+      "Safety Testing",
+      "Smart Home",
+      "Kitchens",
+      "Commercial"
+    ],
+    "ctaText": "Request a quote",
+    "usps": [
+      "Rapid Cheshire Response",
+      "NAPIT & TrustMark Approved",
+      "6-Year Workmanship Warranty",
+      "Domestic & Commercial"
+    ],
+    "accreditations": [
+      { "src": "assets/a0777be22561bd57.jpg", "alt": "NAPIT Approved Electrical Inspector" },
+      { "src": "assets/91285818dbdb8a29.png", "alt": "Registered Competent Person Electrical" },
+      { "src": "assets/90be2a7d4b6d3d29.webp", "alt": "TrustMark Government Endorsed Quality" },
+      { "src": "assets/8af062b28f52fa5f.png", "alt": "OLEV Approved EV Charger Installer" },
+      { "src": "assets/f9fabb1abd89cde4.jpg", "alt": "LightwaveRF Smart Home Pro Partner" },
+      { "src": "assets/6395ccc897bb448d.jpg", "alt": "ISC Electrical Partner" }
+    ]
+  }
+}

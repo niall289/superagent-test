@@ -1,0 +1,73 @@
+{
+  "id": "pimlico-parity",
+  "sourceClone": "plumbing-fdd41869",
+  "title": "Pimlico Plumbers — Verbatim Sliced Header, Hero & Trust Bar",
+  "tokens": {
+    "--brand-primary": "#28348a",
+    "--brand-primary-hover": "#182266",
+    "--brand-accent": "#ed1b2f",
+    "--brand-accent-hover": "#d1001c",
+    "--brand-dark": "#091842",
+    "--brand-dark-alt": "#071843",
+    "--brand-usp-icon": "#00b67a",
+    "--brand-font": "'sofia-pro'",
+    "--header-phone-button-bg": "#ed1b2f"
+  },
+  "slots": {
+    "logoSrc": "assets/755505f561936735.svg",
+    "logoAlt": "Pimlico Plumbers - Property Maintenance Services in London",
+    "tagline": "London’s No.1 – Repair. Maintain. Improve.",
+    "emergencyLabel": "24hrs & emergencies",
+    "phoneDisplay": "020 4527 3790",
+    "phoneHref": "tel:02045273790",
+    "navItems": [
+      "Emergency Repairs",
+      "Repairs & Installations",
+      "Renovations",
+      "Landlords",
+      "Commercial",
+      "About us",
+      "All Trades"
+    ],
+    "promoBannerDesktopHtml": "<strong>10% off bathroom installations.</strong> Get your dream bathroom installed before Christmas",
+    "promoBannerMobileHtml": "10% off bathroom installations.",
+    "heroDesktopSrc": "assets/746096b3f0ff7a7a.jpeg",
+    "heroMobileSrc": "assets/d65a5275310825fc.jpeg",
+    "trustpilotLabel": "Excellent",
+    "h1Html": "Pimlico Plumbers.<br/>Built for London.",
+    "subtitle": "Heating, plumbing, electrics, drainage, carpentry, roofing and more…",
+    "formPrompt": "I need help with",
+    "initialServiceDisplay": "bathrooms",
+    "services": [
+      "Air Conditioning",
+      "Appliances",
+      "Bathrooms",
+      "Building",
+      "Carpentry",
+      "Drains",
+      "Electrics",
+      "Handyman",
+      "Heating",
+      "Kitchens",
+      "Pest Control",
+      "Plumbing",
+      "Roofing",
+      "Commercial"
+    ],
+    "ctaText": "Request a booking",
+    "usps": [
+      "1hr Response Time*",
+      "24/7 Availability",
+      "Over 45 Years’ Experience",
+      "All Trades, Under One Roof"
+    ],
+    "accreditations": [
+      { "src": "assets/7c0745db87eea90b.png", "alt": "NICEIC approved contractor logo" },
+      { "src": "assets/8032b5ae12078dd6.png", "alt": "Gas Safe Logo" },
+      { "src": "assets/84143c69a36097fe.png", "alt": "SafeContractor logo" },
+      { "src": "assets/3e85faae911aecd8.png", "alt": "CHAS logo" },
+      { "src": "assets/b9e64bf566a0c56f.png", "alt": "NFRC logo" },
+      { "src": "assets/6c01302d3da1b78d.png", "alt": "Master Builders logo" }
+    ]
+  }
+}
