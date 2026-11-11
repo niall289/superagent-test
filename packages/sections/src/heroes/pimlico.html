@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pimlico Plumbers — Exact Scrape Clone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --font-trade: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --pimlico-navy: #132044;
+      --pimlico-dark: #071526;
+      --pimlico-red: #ed1b2f;
+      --pimlico-red-hover: #cc1425;
+      --pimlico-text: #0c2340;
+      --pimlico-grey: #656d85;
+      --pimlico-border: #e2e8f0;
+    }
+    body {
+      background-color: #ffffff;
+      color: var(--pimlico-text);
+      font-family: var(--font-trade);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.4;
+      padding-bottom: 60px;
+    }
+
+    /* Top Emergency Strip (Unified Blue & Red Connected Pill) */
+    .site-top-bar {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 12px 24px 0 24px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .emergency-capsule {
+      display: inline-flex;
+      align-items: stretch;
+      background-color: var(--pimlico-navy);
+      border-radius: 100px;
+      overflow: hidden;
+      height: 44px;
+      box-shadow: 0 2px 8px rgba(19, 32, 68, 0.15);
+    }
+    .emergency-label {
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .emergency-phone-btn {
+      background-color: var(--pimlico-red);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 26px;
+      border-radius: 100px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background-color 0.15s ease;
+      white-space: nowrap;
+    }
+    .emergency-phone-btn:hover {
+      background-color: var(--pimlico-red-hover);
+    }
+
+    /* Main Desktop Header Navigation */
+    .site-header {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 14px 24px 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .header-logo-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .header-logo-img {
+      height: 64px;
+      width: auto;
+      display: block;
+    }
+    .header-tagline {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--pimlico-navy);
+      letter-spacing: -0.01em;
+      padding-left: 18px;
+      border-left: 2px solid #e2e8f0;
+      line-height: 1.25;
+      max-width: 200px;
+    }
+    @media (max-width: 1100px) {
+      .header-tagline { display: none; }
+    }
+
+    /* Main Desktop Nav Links */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--pimlico-navy);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.15s ease;
+    }
+    .nav-item:hover {
+      color: var(--pimlico-red);
+    }
+    .nav-item svg {
+      color: #94a3b8;
+    }
+    .nav-search-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--pimlico-navy);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-search-btn:hover {
+      background-color: #f1f5f9;
+      color: var(--pimlico-red);
+    }
+
+    /* Mobile header controls */
+    .mobile-actions {
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    @media (max-width: 960px) {
+      .header-nav { display: none; }
+      .mobile-actions { display: flex; }
+    }
+
+    /* Announcement Ribbon */
+    .promo-ribbon {
+      background-color: var(--pimlico-navy);
+      color: #ffffff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .promo-ribbon a {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+
+    /* Hero Section */
+    .hero-outer-container {
+      max-width: 1320px;
+      margin: 20px auto 0 auto;
+      padding: 0 24px;
+    }
+    .hero-card-plate {
+      position: relative;
+      border-radius: 30px;
+      overflow: visible; /* so dropdown can float over */
+      background-color: var(--pimlico-dark);
+      box-shadow: 0 10px 36px rgba(19, 32, 68, 0.14);
+    }
+    .hero-card-inner {
+      position: relative;
+      border-radius: 30px 30px 0 0;
+      overflow: hidden;
+      min-height: 520px;
+      background-image: url('assets/746096b3f0ff7a7a.jpeg');
+      background-size: cover;
+      background-position: center right;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-card-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(7, 21, 38, 0.92) 0%, rgba(7, 21, 38, 0.78) 48%, rgba(7, 21, 38, 0.12) 85%);
+      z-index: 1;
+    }
+    .hero-card-content {
+      position: relative;
+      z-index: 2;
+      padding: 48px 48px 36px 48px;
+      max-width: 700px;
+    }
+
+    /* Trustpilot Rating */
+    .tp-strip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .tp-star-row {
+      display: inline-flex;
+      gap: 3px;
+    }
+    .tp-star {
+      width: 20px;
+      height: 20px;
+      background-color: #00b67a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 13px;
+    }
+
+    /* Hero Heading & Subhead */
+    .hero-heading {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.06;
+      color: #ffffff;
+      letter-spacing: -0.035em;
+      margin-bottom: 18px;
+    }
+    .hero-subhead {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+      margin-bottom: 36px;
+      max-width: 540px;
+    }
+
+    /* Interactive Rolling Search Pill Form */
+    .booking-bar-wrapper {
+      position: relative;
+      max-width: 630px;
+      width: 100%;
+      z-index: 10;
+    }
+    .pimlico-booking-pill {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border-radius: 100px;
+      padding: 6px 8px 6px 22px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+      cursor: pointer;
+      user-select: none;
+      transition: box-shadow 0.2s ease;
+    }
+    .pimlico-booking-pill:hover {
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+    }
+    .booking-mag-icon {
+      color: var(--pimlico-navy);
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .booking-label-prompt {
+      color: var(--pimlico-navy);
+      font-weight: 700;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+
+    /* Vertical Rolling Word Ticker */
+    .ticker-viewport {
+      height: 34px;
+      overflow: hidden;
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-roll {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+    .ticker-item {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--pimlico-red);
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-transform: lowercase;
+      white-space: nowrap;
+    }
+    .ticker-item svg {
+      color: #64748b;
+      flex-shrink: 0;
+    }
+
+    /* Primary Action CTA */
+    .booking-submit-btn {
+      background-color: var(--pimlico-red);
+      color: #ffffff;
+      border: none;
+      font-family: var(--font-trade);
+      font-size: 1.02rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 100px;
+      cursor: pointer;
+      white-space: nowrap;
+      margin-left: 12px;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+    .booking-submit-btn:hover {
+      background-color: var(--pimlico-red-hover);
+    }
+    .booking-submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Authentic Dropdown Popout Menu */
+    .trade-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 140px;
+      width: 260px;
+      background-color: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.08);
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 8px 0;
+      z-index: 50;
+      display: none;
+    }
+    .trade-dropdown-menu.open {
+      display: block;
+      animation: popIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dropdown-option {
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--pimlico-navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-transform: lowercase;
+      transition: background-color 0.12s ease, color 0.12s ease;
+    }
+    .dropdown-option:hover {
+      background-color: #f8fafc;
+      color: var(--pimlico-red);
+    }
+    .dropdown-option.active {
+      background-color: #eff6ff;
+      color: var(--pimlico-red);
+      font-weight: 800;
+    }
+
+    /* Bottom Anchor Strip of Hero Card (4 Authentic USPs) */
+    .hero-card-footer {
+      position: relative;
+      z-index: 2;
+      background-color: var(--pimlico-navy);
+      border-radius: 0 0 30px 30px;
+      padding: 18px 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card-footer-usp {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .usp-check-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background-color: #10b981;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* Accreditations Strip */
+    .accred-row {
+      max-width: 1320px;
+      margin: 40px auto 48px auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .accred-img {
+      height: 46px;
+      width: auto;
+      object-fit: contain;
+      filter: grayscale(100%);
+      opacity: 0.70;
+      transition: opacity 0.2s ease, filter 0.2s ease;
+    }
+    .accred-img:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+
+    @media (max-width: 900px) {
+      .hero-heading {
+        font-size: 2.35rem;
+      }
+      .pimlico-booking-pill {
+        flex-direction: column;
+        border-radius: 18px;
+        padding: 18px;
+        gap: 12px;
+      }
+      .booking-submit-btn {
+        width: 100%;
+        margin-left: 0;
+        border-radius: 12px;
+      }
+      .trade-dropdown-menu {
+        left: 20px;
+        right: 20px;
+        width: auto;
+      }
+      .hero-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Emergency Dispatch Strip -->
+  <div class="site-top-bar">
+    <div class="emergency-capsule">
+      <span class="emergency-label">24hrs &amp; emergencies</span>
+      <a href="tel:02080156967" class="emergency-phone-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        <span>020 8015 6967</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Header Nav with Authentic SVG Logo and Full Trade Menu -->
+  <header class="site-header">
+    <div class="header-brand">
+      <a href="https://www.pimlicoplumbers.com/" class="header-logo-link" aria-label="Pimlico Plumbers">
+        <img src="assets/pimlico-logo.svg" alt="Pimlico Plumbers" class="header-logo-img">
+      </a>
+      <span class="header-tagline">London’s No.1 – Repair. Maintain. Improve.</span>
+    </div>
+
+    <!-- Main Nav -->
+    <nav class="header-nav">
+      <a href="#" class="nav-item">
+        <span>Emergency Repairs</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <a href="#" class="nav-item">
+        <span>Repairs &amp; Installations</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <a href="#" class="nav-item">
+        <span>Landlords</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <a href="#" class="nav-item">
+        <span>Commercial</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <a href="#" class="nav-item">
+        <span>About us</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <a href="#" class="nav-item">
+        <span>All Trades</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </a>
+      <button class="nav-search-btn" aria-label="Search site">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Promo Ribbon -->
+  <div class="promo-ribbon">
+    <span>🏷️ 10% off bathroom installations. <a href="#">Get your dream bathroom installed before Christmas</a></span>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-outer-container">
+    <div class="hero-card-plate">
+      <div class="hero-card-inner">
+        <div class="hero-card-scrim"></div>
+        <div class="hero-card-content">
+          <!-- Trustpilot -->
+          <div class="tp-strip">
+            <span>Excellent</span>
+            <div class="tp-star-row">
+              <div class="tp-star">★</div>
+              <div class="tp-star">★</div>
+              <div class="tp-star">★</div>
+              <div class="tp-star">★</div>
+              <div class="tp-star">★</div>
+            </div>
+            <span style="font-weight: 800;">Trustpilot</span>
+          </div>
+
+          <h1 class="hero-heading">Pimlico Plumbers.<br>Built for London.</h1>
+          <p class="hero-subhead">Heating, plumbing, electrics, drainage, carpentry, roofing and more...</p>
+
+          <!-- Rolling Search Pill Form -->
+          <div class="booking-bar-wrapper">
+            <div class="pimlico-booking-pill" id="bookingPill" role="button" aria-expanded="false" aria-haspopup="true">
+              <svg class="booking-mag-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span class="booking-label-prompt">I need help with</span>
+              
+              <!-- Vertical Slot-Machine Rolling Ticker -->
+              <div class="ticker-viewport">
+                <div class="ticker-roll" id="tickerRoll">
+                  <div class="ticker-item"><span>bathrooms</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>electrics</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>drains</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>heating</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>plumbing</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>roofing</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>appliances</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>air conditioning</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>carpentry</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                  <div class="ticker-item"><span>pest control</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+                </div>
+              </div>
+
+              <button type="button" class="booking-submit-btn" onclick="event.stopPropagation(); alert('Booking requested for: ' + activeService);">Request a booking</button>
+            </div>
+
+            <!-- Custom Trade Dropdown Menu Popout -->
+            <div class="trade-dropdown-menu" id="tradeMenu">
+              <div class="dropdown-option active" data-service="bathrooms">bathrooms</div>
+              <div class="dropdown-option" data-service="electrics">electrics</div>
+              <div class="dropdown-option" data-service="drains">drains</div>
+              <div class="dropdown-option" data-service="heating">heating</div>
+              <div class="dropdown-option" data-service="plumbing">plumbing</div>
+              <div class="dropdown-option" data-service="roofing">roofing</div>
+              <div class="dropdown-option" data-service="appliances">appliances</div>
+              <div class="dropdown-option" data-service="air conditioning">air conditioning</div>
+              <div class="dropdown-option" data-service="building">building</div>
+              <div class="dropdown-option" data-service="carpentry">carpentry</div>
+              <div class="dropdown-option" data-service="handyman">handyman</div>
+              <div class="dropdown-option" data-service="pest control">pest control</div>
+              <div class="dropdown-option" data-service="commercial">commercial</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Footer Strip with 4 Genuine Pimlico USPs -->
+      <div class="hero-card-footer">
+        <div class="card-footer-usp">
+          <span class="usp-check-badge">✓</span>
+          <span>1hr Response Time*</span>
+        </div>
+        <div class="card-footer-usp">
+          <span class="usp-check-badge">✓</span>
+          <span>24/7 Availability</span>
+        </div>
+        <div class="card-footer-usp">
+          <span class="usp-check-badge">✓</span>
+          <span>Over 45 Years' Experience</span>
+        </div>
+        <div class="card-footer-usp">
+          <span class="usp-check-badge">✓</span>
+          <span>All Trades, Under One Roof</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accreditations Strip -->
+  <footer class="accred-row">
+    <img src="assets/7c0745db87eea90b.png" alt="NICEIC Approved Contractor" class="accred-img">
+    <img src="assets/8032b5ae12078dd6.png" alt="Gas Safe Register" class="accred-img">
+    <img src="assets/84143c69a36097fe.png" alt="SafeContractor" class="accred-img">
+    <img src="assets/3e85faae911aecd8.png" alt="CHAS" class="accred-img">
+    <img src="assets/b9e64bf566a0c56f.png" alt="NFRC Roofing" class="accred-img">
+    <img src="assets/6c01302d3da1b78d.png" alt="Federation of Master Builders" class="accred-img">
+  </footer>
+
+  <script>
+    // Rolling Ticker & Popout Dropdown Engine
+    const services = [
+      "bathrooms", "electrics", "drains", "heating", "plumbing", 
+      "roofing", "appliances", "air conditioning", "carpentry", "pest control"
+    ];
+    let currentIndex = 0;
+    let isPaused = false;
+    let activeService = services[0];
+
+    const rollTrack = document.getElementById('tickerRoll');
+    const bookingPill = document.getElementById('bookingPill');
+    const tradeMenu = document.getElementById('tradeMenu');
+    const options = document.querySelectorAll('.dropdown-option');
+
+    // Auto Roll Interval
+    const rollInterval = setInterval(() => {
+      if (isPaused) return;
+      currentIndex = (currentIndex + 1) % services.length;
+      activeService = services[currentIndex];
+      rollTrack.style.transform = `translateY(-${currentIndex * 34}px)`;
+      updateMenuSelection(activeService);
+    }, 2400);
+
+    function updateMenuSelection(selected) {
+      options.forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-service') === selected);
+      });
+    }
+
+    // Toggle Dropdown
+    bookingPill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = tradeMenu.classList.contains('open');
+      if (isOpen) {
+        tradeMenu.classList.remove('open');
+        isPaused = false;
+      } else {
+        tradeMenu.classList.add('open');
+        isPaused = true;
+      }
+    });
+
+    // Select Trade from Menu
+    options.forEach((opt, idx) => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const selected = opt.getAttribute('data-service');
+        activeService = selected;
+        
+        // Find index in ticker or snap to top
+        const foundIdx = services.indexOf(selected);
+        if (foundIdx !== -1) {
+          currentIndex = foundIdx;
+          rollTrack.style.transform = `translateY(-${currentIndex * 34}px)`;
+        }
+        updateMenuSelection(selected);
+        tradeMenu.classList.remove('open');
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', () => {
+      tradeMenu.classList.remove('open');
+      isPaused = false;
+    });
+  </script>
+</body>
+</html>
